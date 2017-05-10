@@ -11,6 +11,7 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -67,12 +68,12 @@ public class Lugarturistico implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idlugarturistico")
     private List<Recursosmultimedia> recursosmultimediaList;
     @JoinColumn(name = "idmarca", referencedColumnName = "idmarca")
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
     private Marcaturistica idmarca;
     @JoinColumn(name = "idpoblacion", referencedColumnName = "idpoblacion")
-    @ManyToOne
+    @ManyToOne (fetch = FetchType.LAZY)
     private Poblacion idpoblacion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idlugarturistico")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idlugarturistico", fetch = FetchType.LAZY)
     private List<Visita> visitaList;
 
     public Lugarturistico() {

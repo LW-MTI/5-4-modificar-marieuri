@@ -10,6 +10,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -46,7 +47,7 @@ public class Marcaturistica implements Serializable {
     @Size(min = 1, max = 300)
     @Column(name = "nombremarcaturistica")
     private String nombremarcaturistica;
-    @OneToMany(mappedBy = "idmarca")
+    @OneToMany(mappedBy = "idmarca", fetch = FetchType.LAZY)
     private List<Lugarturistico> lugarturisticoList;
 
     public Marcaturistica() {
