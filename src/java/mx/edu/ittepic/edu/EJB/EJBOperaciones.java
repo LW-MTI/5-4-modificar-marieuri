@@ -13,6 +13,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TransactionRequiredException;
 import mx.edu.ittepic.nayaritguideg91.entidades.Entidad;
 import mx.edu.ittepic.nayaritguideg91.entidades.Lugarturistico;
 import mx.edu.ittepic.nayaritguideg91.entidades.Marcaturistica;
@@ -228,8 +229,6 @@ public String consultaPais(){
             for(int i =0; i<listaMarca.size(); i++) {
                 listaMarca.get(i).setLugarturisticoList(null);
             }
-
-
             //Convertir la lista de objetos a JSON
             GsonBuilder builder = new GsonBuilder();
             Gson gson=builder.create();
@@ -441,8 +440,300 @@ public String consultaPais(){
             return "{msg:'error'}";
         } 
    }
+   //****************INSERTAR
+   //1
+   public String actualizaPais(int idpais,String nombrePais){
+      GsonBuilder builder = new GsonBuilder();
+      Gson gson = builder.create(); 
+      Pais pais= new Pais();
+      
+      
+      try{
+          
+          pais.setIdpais(idpais);
+          pais.setNombrepais(nombrePais);
+         
+          em.merge(pais);
+          return gson.toJson(pais);
+      }catch (NumberFormatException e) {
+            
+            return "{msg:'Error 400 Error de tipo dato'}";
+        } catch(IllegalArgumentException e){
+           return "{msg:'Error 422 Error no existe Entidad'}";
+         
+        } catch(TransactionRequiredException e){
+            return "{msg:'Error Se ha excedido el número de peticiones'}";
+        }
+       
+   }
+   //2
+   public String actualizaRol(int idrol, String nombreRol){
+      GsonBuilder builder = new GsonBuilder();
+      Gson gson = builder.create(); 
+      Rol rol= new Rol();
+      
+      
+      try{
+          
+          rol.setIdrol(idrol);
+          rol.setNombrerol(nombreRol);
+         
+          em.merge(rol);
+          return gson.toJson(rol);
+      }catch (NumberFormatException e) {
+            
+            return "{msg:'Error 400 Error de tipo dato'}";
+        } catch(IllegalArgumentException e){
+           return "{msg:'Error 422 Error no existe Entidad'}";
+         
+        } catch(TransactionRequiredException e){
+            return "{msg:'Error Se ha excedido el número de peticiones'}";
+        }
+   }
+   //3
+   public String actualizaMarcaTuristica(int idmarca, String nombreMarcaTuristica){
+      GsonBuilder builder = new GsonBuilder();
+      Gson gson = builder.create(); 
+      Marcaturistica marca= new Marcaturistica();
+      
+      
+      try{
+          
+          marca.setIdmarca(idmarca);
+          marca.setNombremarcaturistica(nombreMarcaTuristica);
+          
+         
+          em.merge(marca);
+          return gson.toJson(marca);
+      }catch (NumberFormatException e) {
+            
+            return "{msg:'Error 400 Error de tipo dato'}";
+        } catch(IllegalArgumentException e){
+           return "{msg:'Error 422 Error no existe Entidad'}";
+         
+        } catch(TransactionRequiredException e){
+            return "{msg:'Error Se ha excedido el número de peticiones'}";
+        }
+   }
+   //4
+   public String actualizaEntidad(int identidad, String nombreentidad){
+      GsonBuilder builder = new GsonBuilder();
+      Gson gson = builder.create(); 
+      Entidad entidad= new Entidad();
+      
+      
+      try{
+          
+          entidad.setIdentidad(identidad);
+          entidad.setNombreentidad(nombreentidad);
+          
+         
+          em.merge(entidad);
+          return gson.toJson(entidad);
+      }catch (NumberFormatException e) {
+            
+            return "{msg:'Error 400 Error de tipo dato'}";
+        } catch(IllegalArgumentException e){
+           return "{msg:'Error 422 Error no existe Entidad'}";
+         
+        } catch(TransactionRequiredException e){
+            return "{msg:'Error Se ha excedido el número de peticiones'}";
+        }  
+   }
+   //5 población
+   public String actualizaPoblacion(int idpoblacion, String nombrepoblacion){
+      GsonBuilder builder = new GsonBuilder();
+      Gson gson = builder.create(); 
+      Poblacion poblacion= new Poblacion();
+      
+      
+      try{
+          
+          poblacion.setIdpoblacion(idpoblacion);
+          poblacion.setNombrepoblacion(nombrepoblacion);
+          
+         
+          em.merge(poblacion);
+          return gson.toJson(poblacion);
+      }catch (NumberFormatException e) {
+            
+            return "{msg:'Error 400 Error de tipo dato'}";
+        } catch(IllegalArgumentException e){
+           return "{msg:'Error 422 Error no existe Entidad'}";
+         
+        } catch(TransactionRequiredException e){
+            return "{msg:'Error Se ha excedido el número de peticiones'}";
+        }  
+   }
    
-    
+   //6 lugarturistico
+   public String actualizaLugarTuristico(int idlugar, String nombreLugar,
+                String descripcion,char tipolugar){
+      GsonBuilder builder = new GsonBuilder();
+      Gson gson = builder.create(); 
+      Lugarturistico lugar= new Lugarturistico();
+      
+      
+      try{
+          
+          lugar.setIdlugarturistico(idlugar);
+          lugar.setDescripcion(descripcion);
+          lugar.setNombrelugar(nombreLugar);
+          lugar.setTipolugar(tipolugar);
+          
+         
+          em.merge(lugar);
+          return gson.toJson(lugar);
+      }catch (NumberFormatException e) {
+            
+            return "{msg:'Error 400 Error de tipo dato'}";
+        } catch(IllegalArgumentException e){
+           return "{msg:'Error 422 Error no existe Entidad'}";
+         
+        } catch(TransactionRequiredException e){
+            return "{msg:'Error Se ha excedido el número de peticiones'}";
+        }  
+   }
+   
+   //7 recursosmultimedia
+   
+   public String actualizaRecursoMultimedia(int idrecurso, String descripcion){
+      GsonBuilder builder = new GsonBuilder();
+      Gson gson = builder.create(); 
+      Recursosmultimedia recurso= new Recursosmultimedia();
+      try{
+          
+          recurso.setIdrecurso(idrecurso);
+          recurso.setDescripcion(descripcion);
+                
+          em.merge(recurso);
+          return gson.toJson(recurso);
+      }catch (NumberFormatException e) {
+            
+            return "{msg:'Error 400 Error de tipo dato'}";
+        } catch(IllegalArgumentException e){
+           return "{msg:'Error 422 Error no existe Entidad'}";
+         
+        } catch(TransactionRequiredException e){
+            return "{msg:'Error Se ha excedido el número de peticiones'}";
+        }  
+       
+   }
+   
+   //8 usuario
+   public String actualizaUsuario(int idusuario, String nombreusuario,
+           String contrasena, String correoelectronico, int idpais){
+      
+       GsonBuilder builder = new GsonBuilder();
+      Gson gson = builder.create(); 
+      Usuario usuario= new Usuario();
+      
+      
+      try{
+          Pais pais= new Pais();
+          pais=(Pais) em.createNamedQuery("Pais.findByIdpais").setParameter("idpais", idpais).getSingleResult();
+          pais.setUsuarioList(null);
+          usuario.setIdusuario(idusuario);
+          usuario.setContrasena(contrasena);
+          usuario.setNombreusuario(nombreusuario);
+          usuario.setCorreoelectronico(correoelectronico);
+          usuario.setIdpais(pais);
+          usuario.setVisitaList(null);
+          
+         
+          em.merge(usuario);
+          return "{msg:'Se ha actualizado el Usuario'}";
+          //return gson.toJson(usuario);
+      }catch (NumberFormatException e) {
+            
+            return "{msg:'Error 400 Error de tipo dato'}";
+        } catch(IllegalArgumentException e){
+           return "{msg:'Error 422 Error no existe Entidad'}";
+         
+        } catch(TransactionRequiredException e){
+            return "{msg:'Error Se ha excedido el número de peticiones'}";
+        }  
+   }
+   
+   //9 usuariosistema
+   
+   public String actualizaUsuarioSistema(int idusuariosistema,
+                            String nombreusuariosistema,
+                            String nombrecompleto, String contra,
+                            char vigente ){
+      GsonBuilder builder = new GsonBuilder();
+      Gson gson = builder.create(); 
+      Usuariosistema usuarioS= new Usuariosistema();
+      
+      
+      try{
+          
+          usuarioS.setIdusuariosistema(idusuariosistema);
+          usuarioS.setNombrecompleto(nombrecompleto);
+          usuarioS.setNombreusuariosistema(nombreusuariosistema);
+          usuarioS.setContra(contra);
+          usuarioS.setVigente(vigente);
+         
+         
+          em.merge(usuarioS);
+          return gson.toJson(usuarioS);
+      }catch (NumberFormatException e) {
+            
+            return "{msg:'Error 400 Error de tipo dato'}";
+        } catch(IllegalArgumentException e){
+           return "{msg:'Error 422 Error no existe Entidad'}";
+         
+        } catch(TransactionRequiredException e){
+            return "{msg:'Error Se ha excedido el número de peticiones'}";
+        }  
+   }
+   
+   //10 visita
+   
+   public String actualizaVisita(int idvisita, int calificacion,
+                                 String comentarios,
+                                 int tiposubida,int idusuario,
+                                 int idlugarturistico
+                                 ){
+      GsonBuilder builder = new GsonBuilder();
+      Gson gson = builder.create(); 
+      Visita visita= new Visita();
+      
+      
+      try{
+          
+          Lugarturistico lugar= new Lugarturistico();
+          lugar= (Lugarturistico) em.createNamedQuery("Lugarturistico.findByIdlugarturistico").setParameter("idlugarturistico", idlugarturistico).getSingleResult();
+          lugar.setVisitaList(null);
+          lugar.setRecursosmultimediaList(null);
+          
+          Usuario usuario=new Usuario();
+          usuario=(Usuario)em.createNamedQuery("Usuario.findByIdusuario").setParameter("idusuario", idusuario).getSingleResult();
+          usuario.setVisitaList(null);
+          
+          visita.setIdvisita(idvisita);
+          visita.setComentarios(comentarios);
+          visita.setCalificacion(calificacion);
+          visita.setTiposubida(tiposubida);
+          visita.setIdlugarturistico(lugar);
+          visita.setIdusuario(usuario);
+          em.merge(visita);
+          //return gson.toJson(visita);
+          // 
+         return "{msg:'Se ha insertado la visita'}";
+      }catch (NumberFormatException e) {
+            
+            return "{msg:'Error 400 Error de tipo dato'}";
+        } catch(IllegalArgumentException e){
+           return "{msg:'Error 422 Error no existe Entidad'}";
+         
+        } catch(TransactionRequiredException e){
+            return "{msg:'Error Se ha excedido el número de peticiones'}";
+        }catch(Exception e){ 
+            return "msg: 'Error en Visita'";
+        }
+        
+   }
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 }
