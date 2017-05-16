@@ -734,6 +734,128 @@ public String consultaPais(){
         }
         
    }
+   
+   
+   //***********sección de ELIMINAR
+   //1
+   public String eliminaVisita(int idvisita){
+       
+       Visita visita= new Visita();
+       
+       try{
+           visita=(Visita) em.createNamedQuery("Visita.findByIdvisita").setParameter("idvisita",idvisita).getSingleResult();
+           em.remove(em.merge(visita));
+           return "{msg:'Se ha eliminado correctamente la visita'}";
+       }catch(Exception e){
+        return "{msg:'error al eliminar Visita'}";
+       }
+       
+   }
+   //2
+   public String eliminaUsuarioSistema(int idusuariosistema){
+       Usuariosistema usuario = new Usuariosistema();
+     
+     try{
+           usuario=(Usuariosistema) em.createNamedQuery("Usuariosistema.findByIdusuariosistema").setParameter("idusuariosistema",idusuariosistema).getSingleResult();
+           em.remove(em.merge(usuario));
+           return "{msg:'Se ha eliminado correctamente el Usuario de Sistema}";
+       }catch(Exception e){
+        return "{msg:'error al eliminar Usuario Sistema'}";
+       }
+   }
+   //3
+   public String eliminaRol(int idrol){
+     Rol rol = new Rol();
+     
+     try{
+           rol=(Rol) em.createNamedQuery("Rol.findByIdrol").setParameter("idrol",idrol).getSingleResult();
+           em.remove(em.merge(rol));
+           return "{msg:'Se ha eliminado correctamente el Rol}";
+       }catch(Exception e){
+        return "{msg:'error al eliminar Rol'}";
+       }
+   
+   }
+   //4
+   public String eliminaRecursosMultimedia(int idrecurso){
+        Recursosmultimedia recurso = new Recursosmultimedia();
+     
+     try{
+           recurso=(Recursosmultimedia) em.createNamedQuery("Recursosmultimedia.findByIdrecurso").setParameter("idrecurso",idrecurso).getSingleResult();
+           em.remove(em.merge(recurso));
+           return "{msg:'Se ha eliminado correctamente el Recurso Multimedia}";
+       }catch(Exception e){
+        return "{msg:'error al eliminar el Recurso Multimedia'}";
+       }
+   }
+   //5
+   public String eliminaLugarTuristico(int idlugarturistico){
+       Lugarturistico lugar = new Lugarturistico();
+       try{
+           lugar=(Lugarturistico) em.createNamedQuery("Lugarturistico.findByIdlugarturistico").setParameter("idlugarturistico",idlugarturistico).getSingleResult();
+           em.remove(em.merge(lugar));
+           return "{msg:'Se ha eliminado correctamente el Lugar Turístico}";
+       }catch(Exception e){
+        return "{msg:'error al eliminar el Lugar Turístico'}";
+       }
+   }
+   //6 
+   public String eliminaMarcaTuristica(int idmarca){
+       Marcaturistica marca= new Marcaturistica();
+       try{
+           marca=(Marcaturistica) em.createNamedQuery("Marcaturistica.findByIdmarca").setParameter("idmarca",idmarca).getSingleResult();
+           em.remove(em.merge(marca));
+           return "{msg:'Se ha eliminado correctamente la Marca Turística}";
+       }catch(Exception e){
+        return "{msg:'Error al eliminar el Marca Turística'}";
+       }
+   
+   }
+   //7
+   public String eliminaPoblacion(int idpoblacion){
+       Poblacion poblacion = new Poblacion();
+       try{
+           poblacion=(Poblacion) em.createNamedQuery("Poblacion.findByIdpoblacion").setParameter("idpoblacion",idpoblacion).getSingleResult();
+           em.remove(em.merge(poblacion));
+           return "{msg:'Se ha eliminado correctamente la Población}";
+       }catch(Exception e){
+        return "{msg:'Error al eliminar el Población'}";
+       }
+   
+   }
+   //8
+   public String eliminaEntidad(int identidad){
+       Entidad entidad = new Entidad();
+        try{
+           entidad=(Entidad) em.createNamedQuery("Entidad.findByIdentidad").setParameter("identidad",identidad).getSingleResult();
+           em.remove(em.merge(entidad));
+           return "{msg:'Se ha eliminado correctamente la Entidad}";
+       }catch(Exception e){
+        return "{msg:'Error al eliminar la Entidad'}";
+       }
+   }
+   //9
+   public String eliminaUsuario (int idusuario){
+       Usuario usuario = new Usuario();
+       try{
+           usuario=(Usuario) em.createNamedQuery("Usuario.findByIdusuario").setParameter("idusuario",idusuario).getSingleResult();
+           em.remove(em.merge(usuario));
+           return "{msg:'Se ha eliminado correctamente el Usuario}";
+       }catch(Exception e){
+        return "{msg:'Error al eliminar el Usuario'}";
+       }
+   }
+   //10
+   public String eliminaPais(int idpais){
+       Pais pais = new Pais();
+       try{
+           pais=(Pais) em.createNamedQuery("Pais.findByIdpais").setParameter("idpais",idpais).getSingleResult();
+           em.remove(em.merge(pais));
+           return "{msg:'Se ha eliminado correctamente el País}";
+       }catch(Exception e){
+        return "{msg:'Error al eliminar el País'}";
+       }
+   }
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
 }

@@ -7,11 +7,13 @@ package mx.edu.ittepic.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import mx.edu.ittepic.edu.EJB.EJBOperaciones;
 
 /**
  *
@@ -19,6 +21,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "EliminaPoblacion", urlPatterns = {"/EliminaPoblacion"})
 public class EliminaPoblacion extends HttpServlet {
+     @EJB private 
+        EJBOperaciones ejb;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -72,7 +76,18 @@ public class EliminaPoblacion extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+         //Que se muestre de manera adecuada
+        response.setContentType("application/json;charset=UTF-8");
+       //Obligar al cliente http a no guardar el resultado de este Servet en cache
+       response.setHeader("Cache-Control","no-store");
+       
+       //Crear el objeto necesario para devolver respuesta
+       PrintWriter p= response.getWriter();
+       
+      
+       int idpoblacion= Integer.parseInt(request.getParameter("idpoblacion"));
+      
+       p.write(ejb.eliminaPoblacion(idpoblacion));
     }
 
     /**

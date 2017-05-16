@@ -19,10 +19,11 @@ import mx.edu.ittepic.edu.EJB.EJBOperaciones;
  *
  * @author marieuri
  */
-@WebServlet(name = "EliminaEntidad", urlPatterns = {"/EliminaEntidad"})
-public class EliminaEntidad extends HttpServlet {
-        @EJB private 
+@WebServlet(name = "EliminaUsuario", urlPatterns = {"/EliminaUsuario"})
+public class EliminaUsuario extends HttpServlet {
+    @EJB private 
         EJBOperaciones ejb;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -40,10 +41,10 @@ public class EliminaEntidad extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EliminaEntidad</title>");            
+            out.println("<title>Servlet EliminaUsuario</title>");            
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet EliminaEntidad at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet EliminaUsuario at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -84,9 +85,9 @@ public class EliminaEntidad extends HttpServlet {
        PrintWriter p= response.getWriter();
        
       
-       int identidad= Integer.parseInt(request.getParameter("identidad"));
+       int idusuario= Integer.parseInt(request.getParameter("idusuario"));
       
-       p.write(ejb.eliminaEntidad(identidad));
+       p.write(ejb.eliminaUsuario(idusuario));
     }
 
     /**
