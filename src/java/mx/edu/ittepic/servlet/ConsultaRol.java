@@ -68,7 +68,7 @@ public class ConsultaRol extends HttpServlet {
        
        //Crear el objeto necesario para devolver respuesta
        PrintWriter p= response.getWriter();
-       p.print(ejb.consultaRol());
+       p.print("{\"data\":"+ejb.consultaRol()+"}");
     }
 
     /**

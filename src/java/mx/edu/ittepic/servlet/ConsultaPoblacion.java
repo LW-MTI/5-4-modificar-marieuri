@@ -68,7 +68,7 @@ public class ConsultaPoblacion extends HttpServlet {
        
        //Crear el objeto necesario para devolver respuesta
        PrintWriter p= response.getWriter();
-       p.print(ejb.consultaPoblacion());
+       p.print("{\"data\":"+ejb.consultaPoblacion()+"}");
     }
 
     /**

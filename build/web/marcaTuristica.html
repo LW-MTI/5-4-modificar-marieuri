@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Catálogo Marca Turística-NayaritGuide</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//code.jquery.com/jquery-1.12.4.js"> </script>
+        <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+        
+        
+        <script>
+               $(document).ready(
+                   function(){
+                       $('#tbMarcaTuristica').DataTable(
+                       {
+                           "ajax":"ConsultaMarcaTuristica",
+                                                                       //http://localhost:8080/EjemploDatabases/ConsultaPersona"//"data/usuario.json", //Datasouces
+                           "columns":[    //Atributos que se pondrán en cada columna
+                               {"data":"idmarca"},
+                               {"data":"nombremarcaturistica"},
+                               
+                               {"data":
+                                       function(row){
+                                          var r=row['idmarca']+"-"+row['nombremarcaturistica']; //Acceder 
+                                          var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteMarca("+row['idmarca']+")'>Borrar</button>"
+                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editMarca("+row['idmarca']+")'>Editar</button>"
+                                          return botones;
+                                       }
+                               }
+                           ]
+                       });
+                          //document.getElementByID('tbUsuarios');
+                          
+                          //
+                          $('#frmMarcaTuristica').validate({
+                            rules: {
+                                nombremarcaturistica: {
+                                    required: true
+                                }
+                            },
+                            messages: {
+                                nombremarcaturistica: {
+                                    required: "El nombre de la Marca Turística es requerido"
+                                }
+                            },
+                            highlight: function (element) {
+                                $(element).closest('.form-group').addClass('has-error');
+                            },
+                            unhighlight: function (element) {
+                                $(element).closest('.form-group').removeClass('has-error');
+                            },
+                            errorElement: 'span',
+                            errorClass: 'help-block',
+                            errorPlacement: function (error, element) {
+                                if (element.parent('.input-group'.length)) {
+                                    error.insertAfter(element.parent());
+                                } else {
+                                    error.insertAfter(element)
+                                }
+                            },
+                            submitHandler: function (form) {
+                                console.log('Formulario válido');
+                                nuevoMarcaTuristica();
+                                return false;
+                            }
+                            
+                            
+                        });
+                          //
+                   }        
+               ); // que se ejecute ya que esté listo
+               //
+               function deleteMarcaTuristica(idmarca) {
+
+                //Utilizando Ajax para realizar una petición al servlet que elimina personas
+                $.ajax({
+                    url: "EliminaMarcaTuristica", //Url del Servlet
+                    type: "POST", //Método HTTP por el que se hace la petición
+                    data: {//Es la información que mando al servlet
+                        idmarca: idmarca
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbMarcaTuristica').dataTable().api().ajax.reload();
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+            }
+                        
+                    
+
+               //
+               function nuevaMarcaTuristica() {
+                $.ajax({
+                    url: 'NuevaMarcaTuristica',
+                    type: 'POST',
+                    data: {
+                        nombremarcaturistica: $("#nombremarcaturistica").val()
+                       
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbMarcaTuristica').dataTable().api().ajax.reload();
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+
+
+            }
+
+            function showRol(idrol, nombrerol) {
+                $("#idmarca2").val(idrol);
+                $("#nombremarcaturistica2").val(nombrerol);
+                
+
+            }
+               //
+              
+        </script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" >
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="modalMarcaTuristica" class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                        <h3>Modificar Marca Turística</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form class="col-lg-12" id="frmMarcaTuristica2" method="POST">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombremarcaturistica2">Marca Turistica</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">N</span>
+                                        <input class="form-control" id="nombremarcaturistica2" name="nombremarcaturistica2">
+                                        <input type="hidden" id="id" name="id">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnEditar" class="btn btn-sm btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+             <h1>Marca Turística</h1>
+             
+             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <form class="col-lg-12" id="frmMarcaTuristica" method="POST">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" for="nombremarcaturistica">Marca Turística</label>
+                            <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                <span class="input-group-addon">N</span>
+                                <input class="form-control" id="nombremarcaturistica" name="nombremarcaturistica">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div align="right">
+                        <button type="submit" class="btn btn-primary btn-lg">Guardar</button> 
+                    </div>
+
+                </form>
+            </div>
+             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <table id="tbMarcaTuristica" > 
+                    <thead>
+                        <tr>
+                           
+                           
+                            <th>Clave</th>
+                            <th>Marca Turística</th>
+                            <th>Acciones</th>
+                            
+                        
+                        </tr>
+		
+                    </thead>
+                </table>
+             </div>
+        </div>
+    </body>
+</html>
+
+

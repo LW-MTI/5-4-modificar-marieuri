@@ -125,10 +125,13 @@ public String nuevoUsuario(String nombreUsuario, String contrasena,
     }
     
 }
-public String nuevoRecursoMultimedia(String descripcion, long contenido){
+public String nuevoRecursoMultimedia(String descripcion, long contenido, int idlugarturistico){
+    Lugarturistico l= new Lugarturistico();
+    l=(Lugarturistico)em.createNamedQuery("Lugarturistico.findByIdlugarturistico").setParameter("idlugarturistico", idlugarturistico).getSingleResult();
     Recursosmultimedia r = new Recursosmultimedia();
     r.setDescripcion(descripcion);
     r.setContenido(contenido);
+    r.setIdlugarturistico(l);
     
     try{
         em.persist(r);

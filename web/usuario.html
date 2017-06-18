@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Catálogo Usuario-NayaritGuide</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//code.jquery.com/jquery-1.12.4.js"> </script>
+        <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+        
+        
+        <script>
+               $(document).ready(
+                   function(){
+                       $('#tbUsuario').DataTable(
+                       {
+                           "ajax":"ConsultaUsuario",
+                                                                       //http://localhost:8080/EjemploDatabases/ConsultaPersona"//"data/usuario.json", //Datasouces
+                           "columns":[    //Atributos que se pondrán en cada columna
+                               {"data":"idusuario"},
+                               {"data":"nombreusuario"},
+                               {"data":"contrasena"},
+                               {"data":"correoelectronico"},
+                              
+                               
+                               
+                               {"data":
+                                       function(row){
+                                          var r=row['idusuario']+"-"+row['nombreusuario']; //Acceder 
+                                          var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteUsuarioSistema("+row['idusuario']+")'>Borrar</button>"
+                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editUsuarioSistema("+row['idusuario']+")'>Editar</button>"
+                                          return botones;
+                                       }
+                               }
+                           ]
+                       });
+                          //document.getElementByID('tbUsuarios');
+                          
+                          //
+                          $('#frmUsuario').validate({
+                            rules: {
+                                nombreusuario: {
+                                    required: true
+                                },
+                                contrasena:{
+                                    required: true
+                                },
+                                correoelectronico:{
+                                    required:true
+                                }
+                                
+                            },
+                            messages: {
+                                nombreusuario: {
+                                    required: "El nombre del usuario es requerido"
+                                },
+                                contrasena: {
+                                    required: "La contraseña  es requerido"
+                                },
+                                correoelectronico: {
+                                    required: "El correo electrónico  es requerido"
+                                }
+                            },
+                            highlight: function (element) {
+                                $(element).closest('.form-group').addClass('has-error');
+                            },
+                            unhighlight: function (element) {
+                                $(element).closest('.form-group').removeClass('has-error');
+                            },
+                            errorElement: 'span',
+                            errorClass: 'help-block',
+                            errorPlacement: function (error, element) {
+                                if (element.parent('.input-group'.length)) {
+                                    error.insertAfter(element.parent());
+                                } else {
+                                    error.insertAfter(element)
+                                }
+                            },
+                            submitHandler: function (form) {
+                                console.log('Formulario válido');
+                                nuevoUsuario();
+                                return false;
+                            }
+                            
+                            
+                        });
+                          //
+                   }        
+               ); // que se ejecute ya que esté listo
+               //
+               function deleteUsuarioSistema(idusuariosistema) {
+
+                //Utilizando Ajax para realizar una petición al servlet que elimina personas
+                $.ajax({
+                    url: "EliminaUsuario", //Url del Servlet
+                    type: "POST", //Método HTTP por el que se hace la petición
+                    data: {//Es la información que mando al servlet
+                        idusuariosistema: idusuariosistema
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbUsuario').dataTable().api().ajax.reload();
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+            }
+                        
+                    
+
+               //
+               function nuevoUsuarioSistema() {
+                $.ajax({
+                    url: 'NuevoUsuario',
+                    type: 'POST',
+                    data: {
+                        nombreusuariosistema :$("#nombreusuario").val(),
+                        nombrecompleto: $("#nombrecompleto:").val(),
+                        contra:$("#contrasena").val()
+                        
+                       
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbUsuario').dataTable().api().ajax.reload();
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+
+
+            }
+
+            function showUsuarioSistema(idusuario, nombreusuario,contrasena,
+                                        correoelectronico) {
+                $("#id2").val(idusuario);
+                $("#nombreusuario2").val(nombreusuario);
+                $("#contrasena2").val(contrasena);
+                $("#correoelectronico2").val(correoelectronico);
+                
+                
+                $("#modalUsuarioSistema").modal("show");
+
+            }
+               //
+              
+        </script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" >
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="modalUsuario" class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                        <h3>Modificar Usuario Sistema</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form class="col-lg-12" id="frmUsuario2" method="POST">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombreusuario2">Rol</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">N</span>
+                                        <input class="form-control" id="nombreusuario2" name="nombreusuario2">
+                                        <input type="hidden" id="id" name="id">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="contrasena2">Contraseña</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">C</span>
+                                        <input class="form-control" id="contrasena2" name="contrasena2" type="password">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="correoelectronico2">Correo Electrónico</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">V</span>
+                                        <input class="form-control" id="correoelectronico2" name="correoelectronico2" type="email">
+                                    </div>
+                                </div>
+                            </div>
+                           
+                            
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnEditar" class="btn btn-sm btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+             <h1>Usuario</h1>
+             
+             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <form class="col-lg-12" id="frmUsuario" method="POST">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" for="nombreusuario">Nombre usuario</label>
+                            <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                <span class="input-group-addon">N</span>
+                                <input class="form-control" id="nombreusuario" name="nombreusuario">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" for="contrasena">Contraseña</label>
+                            <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                <span class="input-group-addon">C</span>
+                                <input class="form-control" id="contrasena" name="contrasena" type="password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" for="correoelectronico">Correo Electrónico</label>
+                            <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                <span class="input-group-addon">E</span>
+                                <input class="form-control" id="correoelectronico" name="correoelectronico" type="email">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div align="right">
+                        <button type="submit" class="btn btn-primary btn-lg">Guardar</button> 
+                    </div>
+
+                </form>
+            </div>
+             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <table id="tbUsuario" > 
+                    <thead>
+                        <tr>
+                           
+                           
+                            <th>Clave</th>
+                            <th>Nombre Usuario</th>
+                            <th>Contrasena</th>
+                            <th>Correo Electrónico</th>
+                            <th>Acciones</th>
+                            
+                        
+                        </tr>
+		
+                    </thead>
+                </table>
+             </div>
+        </div>
+    </body>
+</html>
+
+

@@ -68,7 +68,7 @@ public class ConsultaEntidad extends HttpServlet {
        
        //Crear el objeto necesario para devolver respuesta
        PrintWriter p= response.getWriter();
-       p.print(ejb.consultaEntidad());
+       p.print("{\"data\":"+ejb.consultaEntidad()+"}");
     }
 
     /**

@@ -68,7 +68,7 @@ public class ConsultaLugarTuristico extends HttpServlet {
        
        //Crear el objeto necesario para devolver respuesta
        PrintWriter p= response.getWriter();
-      p.print(ejb.consultaLugarTuristico());
+      p.print("{\"data\":"+ejb.consultaLugarTuristico()+"}");
     }
 
     /**

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//code.jquery.com/jquery-1.12.4.js"> </script>
+        <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+        
+        
+        <script>
+               $(document).ready(
+                   function(){
+                       $('#tbEntidad').DataTable(
+                       {
+                           "ajax":"ConsultaEntidad",
+                                                                                //http://localhost:8080/EjemploDatabases/ConsultaPersona"//"data/usuario.json", //Datasouces
+                           "columns":[    //Atributos que se pondrán en cada columna
+                               {"data":"identidad", "visible":false},
+                               {"data":"nombreentidad"},
+                               
+                               {"data":
+                                       function(row){
+                                          var r=row['identidad']+"-"+row['nombreentidad']; //Acceder 
+                                          
+                                       }
+                               }
+                           ]
+                       });
+                          //document.getElementByID('tbUsuarios');
+                   }        
+               ); // que se ejecute ya que esté listo
+               
+              
+        </script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" >
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div>
+             <h1>Usuarios </h1>
+                <table id="tbEntidad" class="table table-striped"> 
+                    <thead>
+                        <tr>
+                            
+                            <th>Entidad</th>	
+                            
+                        
+                        </tr>
+		
+                    </thead>
+                </table>
+        </div>
+    </body>
+</html>

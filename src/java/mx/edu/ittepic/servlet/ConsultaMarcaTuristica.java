@@ -67,7 +67,7 @@ public class ConsultaMarcaTuristica extends HttpServlet {
        
        //Crear el objeto necesario para devolver respuesta
        PrintWriter p= response.getWriter();
-      p.print(ejb.consultaMarcaTuristica());
+      p.print("{\"data\":"+ejb.consultaMarcaTuristica()+"}");
     }
 
     /**

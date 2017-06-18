@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>País-NayaritGuide</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        
+        <script>
+            $(document).ready(
+                    function () {
+                        $('#tbPais').DataTable(
+                                {
+                                    "ajax": "ConsultaPais", //Datasource
+
+                                    "columns": [//Atributos que pondrá en cada columna
+                                        {"data": "idpais", "visible": false},
+                                        {"data": "nombrepais"},
+                                        
+                                        {"data":
+                                                    function (r1) {
+                                                        var r = r1['idpais'] + "-" + r1['nombrepais']; //Acceder a los elementos del renglon
+                                                        var botones = "<button id='btnBorrar' class='btn btn-xs btn-danger' \n\
+                                                                        onClick='deleteUser(" + r1['idpais'] + ")'>Borrar</button>";
+                                                        botones += "<button id='btnEditar' class='btn btn-xs btn-warning' \n\
+                                                                    onClick='showUser(" + r1['idpais']
+                                                                + ",\"" + r1['nombrepais'] 
+                                                                + ")'>Editar</button>";
+
+
+
+                                                        return botones;
+                                                    }
+                                        }
+                                    ]
+                                }
+                        );
+
+                        $('#frmPais').validate({
+                            rules: {
+                                nomprepais: {
+                                    required: true
+                                }
+                            },
+                            messages: {
+                                nombrepais: {
+                                    required: "El nombre del país es requerido"
+                                }
+                            },
+                            highlight: function (element) {
+                                $(element).closest('.form-group').addClass('has-error');
+                            },
+                            unhighlight: function (element) {
+                                $(element).closest('.form-group').removeClass('has-error');
+                            },
+                            errorElement: 'span',
+                            errorClass: 'help-block',
+                            errorPlacement: function (error, element) {
+                                if (element.parent('.input-group'.length)) {
+                                    error.insertAfter(element.parent());
+                                } else {
+                                    error.insertAfter(element)
+                                }
+                            },
+                            submitHandler: function (form) {
+                                console.log('Formulario válido');
+                                newUser();
+                                return false;
+                            }
+                        });
+                        $('#frmPais2').validate({
+                            rules: {
+                                nombrepais2: {
+                                    required: true
+                                }
+                            },
+                            messages: {
+                                nombrepais2: {
+                                    required: "El nombre del país es requerido"
+                                }
+                            },
+                            highlight: function (element) {
+                                $(element).closest('.form-group').addClass('has-error');
+                            },
+                            unhighlight: function (element) {
+                                $(element).closest('.form-group').removeClass('has-error');
+                            },
+                            errorElement: 'span',
+                            errorClass: 'help-block',
+                            errorPlacement: function (error, element) {
+                                if (element.parent('.input-group'.length)) {
+                                    error.insertAfter(element.parent());
+                                } else {
+                                    error.insertAfter(element)
+                                }
+                            },
+                            submitHandler: function (form) {
+                                console.log('Formulario válido');
+                                updateUser();
+                                return false;
+                            }
+                        });
+
+                        $('#btnEditar').on('click', function () {
+                            $('#frmPais2').submit();
+                        });
+                    }
+
+            );
+
+            function deleteUser(id) {
+
+                //Utilizando Ajax para realizar una petición al servlet que elimina personas
+                $.ajax({
+                    url: "EliminaPais", //Url del Servlet
+                    type: "POST", //Método HTTP por el que se hace la petición
+                    data: {//Es la información que mando al servlet
+                        id: id
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbPais').dataTable().api().ajax.reload();
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+            }
+
+            function newUser() {
+                $.ajax({
+                    url: 'NuevoPais',
+                    type: 'POST',
+                    data: {
+                        name: $("#nombrepais").val()
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbPais').dataTable().api().ajax.reload();
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+
+
+            }
+
+            function showUser(id, name, email, edad) {
+                $("#id").val(id);
+                $("#nombrepais2").val(name);
+                
+
+            }
+
+            function updateUser() {
+                $.ajax({
+                    url: 'ActualizaPais',
+                    type: 'POST',
+                    data: {
+                        name: $("#nombrepais2").val()
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbPais').dataTable().api().ajax.reload();
+                    
+                    //Cerrando el modal
+                    $('#modalPais').modal("toggle");
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+            }
+
+        </script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        
+    </head>
+    <body>
+         <div id="modalPais" class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                        <h3>Modificar País</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form class="col-lg-12" id="frmPais2" method="POST">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="nombrepais2">País</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">N</span>
+                                        <input class="form-control" id="nombrepais2" name="nombrepais2">
+                                        <input type="hidden" id="id" name="id">
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnEditar" class="btn btn-sm btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+            <h1>País</h1>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <form class="col-lg-12" id="frmPais" method="POST">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" for="nombrepais">Nombre País</label>
+                            <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                <span class="input-group-addon">N</span>
+                                <input class="form-control" id="nombrepais" name="nombrepais">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    
+                    <div align="right">
+                        <button type="submit" class="btn btn-primary btn-lg">Guardar</button> 
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <table id="tbPaís">
+                    <thead>
+                        <tr>
+                            <th>Clave</th>
+                            <th>Nombre País</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+
+                </table>
+            </div>
+        </div>
+    </body>
+</html>

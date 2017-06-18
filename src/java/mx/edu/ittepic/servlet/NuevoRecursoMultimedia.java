@@ -85,8 +85,9 @@ public class NuevoRecursoMultimedia extends HttpServlet {
        
        String descripcion= request.getParameter("descripcion");
        String contenido = request.getParameter("contenido");
+       int idlugar =Integer.parseInt(request.getParameter("idlugar"));
        long   c= Integer.parseInt(contenido);
-       p.write(ejb.nuevoRecursoMultimedia(descripcion,c));
+       p.write(ejb.nuevoRecursoMultimedia(descripcion,c,idlugar));
     }
 
     /**

@@ -68,7 +68,7 @@ public class ConsultaRecursoMultimedia extends HttpServlet {
        
        //Crear el objeto necesario para devolver respuesta
        PrintWriter p= response.getWriter();
-       p.print(ejb.consultaRecursoMultimedia());
+       p.print("{\"data\":"+ejb.consultaRecursoMultimedia()+"}");
     }
 
     /**

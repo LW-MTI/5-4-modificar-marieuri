@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Catálogo Visita-NayaritGuide</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="//code.jquery.com/jquery-1.12.4.js"> </script>
+        <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+        
+        
+        <script>
+               $(document).ready(
+                   function(){
+                       $('#tbVisita').DataTable(
+                       {
+                           "ajax":"ConsultaVisita",
+                                                                       //http://localhost:8080/EjemploDatabases/ConsultaPersona"//"data/usuario.json", //Datasouces
+                           "columns":[    //Atributos que se pondrán en cada columna
+                               {"data":"idvisita"},
+                               {"data":"calificacion"},
+                               {"data":"comentarios"},
+                               
+                               {"data":
+                                       function(row){
+                                          var r=row['idvisita']+"-"+row['calificación']; //Acceder 
+                                          var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteLugarTuristico("+row['idvisita']+")'>Borrar</button>"
+                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editLugarTuristico("+row['idvisita']+")'>Editar</button>"
+                                          return botones;
+                                       }
+                               }
+                           ]
+                       });
+                          //document.getElementByID('tbUsuarios');
+                          
+                          //
+                          $('#frmVisita').validate({
+                            rules: {
+                                calificacion: {
+                                    required: true
+                                },
+                                comentarios:{
+                                    required: true
+                                },
+                                tiposubida:{
+                                    required: true
+                                }
+                                
+                            },
+                            messages: {
+                                calificacion: {
+                                    required: "La descripción  es requerido"
+                                },
+                                comentarios:{
+                                    required: "El tipo lugar es requerido"
+                                },
+                                tiposubida:{
+                                    required: "El nombre del lugar es requerido"
+                                }
+                            },
+                            highlight: function (element) {
+                                $(element).closest('.form-group').addClass('has-error');
+                            },
+                            unhighlight: function (element) {
+                                $(element).closest('.form-group').removeClass('has-error');
+                            },
+                            errorElement: 'span',
+                            errorClass: 'help-block',
+                            errorPlacement: function (error, element) {
+                                if (element.parent('.input-group'.length)) {
+                                    error.insertAfter(element.parent());
+                                } else {
+                                    error.insertAfter(element)
+                                }
+                            },
+                            submitHandler: function (form) {
+                                console.log('Formulario válido');
+                                nuevaVisita();
+                                return false;
+                            }
+                            
+                            
+                        });
+                          //
+                   }        
+               ); // que se ejecute ya que esté listo
+               //
+               function deleteLugarTuristico(idvisita) {
+
+                //Utilizando Ajax para realizar una petición al servlet que elimina personas
+                $.ajax({
+                    url: "EliminaLugarTuristico", //Url del Servlet
+                    type: "POST", //Método HTTP por el que se hace la petición
+                    data: {//Es la información que mando al servlet
+                        idvisita: idvisita
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbVisita').dataTable().api().ajax.reload();
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+            }
+                        
+                    
+
+               //
+               function nuevaVisita() {
+                $.ajax({
+                    url: 'NuevaVisita',
+                    type: 'POST',
+                    data: {
+                        nombrelugar:("#nombrelugar").val(), 
+                        tipolugar: $("#tipolugar").val(),
+                        descripcion: $("#descripcion").val()
+                       
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbVisita').dataTable().api().ajax.reload();
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+
+
+            }
+
+            function showVisita( calificacion,comentarios, tiposubida) {
+                
+                $("#calificacion2").val(calificacion);
+                $("#comentarios2").val(comentarios);
+                $("#tiposubida2").val(tiposubida);
+                $("#modalPais").modal("show");
+
+            }
+               //
+              
+        </script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" >
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div id="modalPais" class="modal">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal"
+                                aria-hidden="true">&times;</button>
+                        <h3>Modificar lugar turístico</h3>
+                    </div>
+                    <div class="modal-body">
+                        <form class="col-lg-12" id="frmVisita2" method="POST">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="comentarios2">Comentarios</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">C</span>
+                                        <input class="form-control" id="comentarios2" name="comentarios2">
+                                        <input type="hidden" id="id" name="id">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="calificacion2">Calificación</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">C</span>
+                                        <input class="form-control" id="calificacion2" name="calificacion2">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="tiposubida2">Tipo subida</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">T</span>
+                                        <input class="form-control" id="tiposubida2" name="tiposubida2">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="btnEditar" class="btn btn-sm btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div>
+             <h1>Lugar turístico </h1>
+             
+             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <form class="col-lg-12" id="frmVisita" method="POST">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" for="comentarios">Comentarios</label>
+                            <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                <span class="input-group-addon">N</span>
+                                <input class="form-control" id="nombrelugar" name="nombrelugar">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="tipolugar">Tipo subida</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">T</span>
+                                        <input class="form-control" id="tipolugar" name="tipolugar">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="calificacion">Calificación</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">D</span>
+                                        <input class="form-control" id="calificacion" name="calificacion">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                    
+                    
+                    <div align="right">
+                        <button type="submit" class="btn btn-primary btn-lg">Guardar</button> 
+                    </div>
+
+                </form>
+            </div>
+             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+                <table id="tbVisita" > 
+                    <thead>
+                        <tr>
+                           
+                           
+                            <th>Clave</th>
+                            <th>Calificación</th>
+                            <th>Comentarios</th>
+                            <th>Acciones</th>
+                            
+                        
+                        </tr>
+		
+                    </thead>
+                </table>
+             </div>
+        </div>
+    </body>
+</html>
+
+
