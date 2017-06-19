@@ -79,17 +79,20 @@ and open the template in the editor.
 
                 //Utilizando Ajax para realizar una petición al servlet que elimina personas
                 $.ajax({
-                    url: "EliminaPais", //Url del Servlet
+                    url: "EliminaRol", //Url del Servlet
                     type: "POST", //Método HTTP por el que se hace la petición
                     data: {//Es la información que mando al servlet
                         idrol: idrol
                     }
                 }).done(function (json) { //Se ejecuta cuando todo sale bien
                     alert(json.msj);
+                   
                     //Refrescando la tabla
                     $('#tbRol').dataTable().api().ajax.reload();
                 }).fail(function (json) { //Se ejecuta cuando algo sale mal
                     alert(json.msj);
+                    
+                    //alert("error");
                 });
             }
                         
@@ -101,7 +104,7 @@ and open the template in the editor.
                     url: 'NuevoRol',
                     type: 'POST',
                     data: {
-                        name: $("#nombrerol").val()
+                        idrol: $("#nombrerol").val()
                        
                     }
                 }).done(function (json) { //Se ejecuta cuando todo sale bien
@@ -116,7 +119,7 @@ and open the template in the editor.
             }
 
             function showRol(idrol, nombrerol) {
-                $("#idrol2").val(idrol);
+               
                 $("#nombrerol2").val(nombrerol);
                 $("#modalRol").modal("show");
 

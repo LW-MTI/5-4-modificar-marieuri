@@ -28,8 +28,8 @@ and open the template in the editor.
                                {"data":
                                        function(row){
                                           var r=row['idvisita']+"-"+row['calificación']; //Acceder 
-                                          var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteLugarTuristico("+row['idvisita']+")'>Borrar</button>"
-                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editLugarTuristico("+row['idvisita']+")'>Editar</button>"
+                                          var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteVisita("+row['idvisita']+")'>Borrar</button>"
+                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editVisita("+row['idvisita']+")'>Editar</button>"
                                           return botones;
                                        }
                                }
@@ -89,11 +89,11 @@ and open the template in the editor.
                    }        
                ); // que se ejecute ya que esté listo
                //
-               function deleteLugarTuristico(idvisita) {
+               function deleteVisita(idvisita) {
 
                 //Utilizando Ajax para realizar una petición al servlet que elimina personas
                 $.ajax({
-                    url: "EliminaLugarTuristico", //Url del Servlet
+                    url: "EliminaVisita", //Url del Servlet
                     type: "POST", //Método HTTP por el que se hace la petición
                     data: {//Es la información que mando al servlet
                         idvisita: idvisita
@@ -153,7 +153,7 @@ and open the template in the editor.
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"
                                 aria-hidden="true">&times;</button>
-                        <h3>Modificar lugar turístico</h3>
+                        <h3>Modificar visita</h3>
                     </div>
                     <div class="modal-body">
                         <form class="col-lg-12" id="frmVisita2" method="POST">
@@ -198,7 +198,7 @@ and open the template in the editor.
         </div>
 
         <div>
-             <h1>Lugar turístico </h1>
+             <h1>Visita </h1>
              
              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <form class="col-lg-12" id="frmVisita" method="POST">

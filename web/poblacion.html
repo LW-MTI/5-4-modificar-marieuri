@@ -77,14 +77,14 @@ and open the template in the editor.
                    }        
                ); // que se ejecute ya que esté listo
                //
-               function deletePais(idpais) {
+               function deletePoblacion(idpoblacion) {
 
                 //Utilizando Ajax para realizar una petición al servlet que elimina personas
                 $.ajax({
                     url: "EliminaPoblacion", //Url del Servlet
                     type: "POST", //Método HTTP por el que se hace la petición
                     data: {//Es la información que mando al servlet
-                        idpais: idpais
+                        idpoblacion: idpoblacion
                     }
                 }).done(function (json) { //Se ejecuta cuando todo sale bien
                     alert(json.msj);

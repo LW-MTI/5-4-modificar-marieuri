@@ -744,120 +744,151 @@ public String consultaPais(){
    public String eliminaVisita(int idvisita){
        
        Visita visita= new Visita();
+       String msj;
        
        try{
            visita=(Visita) em.createNamedQuery("Visita.findByIdvisita").setParameter("idvisita",idvisita).getSingleResult();
            em.remove(em.merge(visita));
-           return "{msg:'Se ha eliminado correctamente la visita'}";
-       }catch(Exception e){
-        return "{msg:'error al eliminar Visita'}";
-       }
+           msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
+        }
+       return msj;
        
    }
    //2
    public String eliminaUsuarioSistema(int idusuariosistema){
+       String msj;
        Usuariosistema usuario = new Usuariosistema();
      
      try{
            usuario=(Usuariosistema) em.createNamedQuery("Usuariosistema.findByIdusuariosistema").setParameter("idusuariosistema",idusuariosistema).getSingleResult();
            em.remove(em.merge(usuario));
-           return "{msg:'Se ha eliminado correctamente el Usuario de Sistema}";
-       }catch(Exception e){
-        return "{msg:'error al eliminar Usuario Sistema'}";
-       }
+            msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
+        }
+       return msj;
    }
    //3
    public String eliminaRol(int idrol){
      Rol rol = new Rol();
+     String msj;
      
      try{
            rol=(Rol) em.createNamedQuery("Rol.findByIdrol").setParameter("idrol",idrol).getSingleResult();
            em.remove(em.merge(rol));
-           return "{msg:'Se ha eliminado correctamente el Rol}";
-       }catch(Exception e){
-        return "{msg:'error al eliminar Rol'}";
-       }
-   
+           
+            msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
+        }
+       return msj;
    }
    //4
    public String eliminaRecursosMultimedia(int idrecurso){
+       
+       String msj;
         Recursosmultimedia recurso = new Recursosmultimedia();
      
      try{
            recurso=(Recursosmultimedia) em.createNamedQuery("Recursosmultimedia.findByIdrecurso").setParameter("idrecurso",idrecurso).getSingleResult();
            em.remove(em.merge(recurso));
-           return "{msg:'Se ha eliminado correctamente el Recurso Multimedia}";
-       }catch(Exception e){
-        return "{msg:'error al eliminar el Recurso Multimedia'}";
-       }
+           msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
+        }
+       return msj;
    }
    //5
    public String eliminaLugarTuristico(int idlugarturistico){
+       String msj;
        Lugarturistico lugar = new Lugarturistico();
        try{
            lugar=(Lugarturistico) em.createNamedQuery("Lugarturistico.findByIdlugarturistico").setParameter("idlugarturistico",idlugarturistico).getSingleResult();
            em.remove(em.merge(lugar));
-           return "{msg:'Se ha eliminado correctamente el Lugar Turístico}";
-       }catch(Exception e){
-        return "{msg:'error al eliminar el Lugar Turístico'}";
-       }
+           msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
+        }
+       return msj;
    }
    //6 
    public String eliminaMarcaTuristica(int idmarca){
+       String msj;
        Marcaturistica marca= new Marcaturistica();
        try{
            marca=(Marcaturistica) em.createNamedQuery("Marcaturistica.findByIdmarca").setParameter("idmarca",idmarca).getSingleResult();
            em.remove(em.merge(marca));
-           return "{msg:'Se ha eliminado correctamente la Marca Turística}";
-       }catch(Exception e){
-        return "{msg:'Error al eliminar el Marca Turística'}";
-       }
+           msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
+        }
+       return msj;
    
    }
    //7
    public String eliminaPoblacion(int idpoblacion){
+       String msj;
        Poblacion poblacion = new Poblacion();
        try{
            poblacion=(Poblacion) em.createNamedQuery("Poblacion.findByIdpoblacion").setParameter("idpoblacion",idpoblacion).getSingleResult();
            em.remove(em.merge(poblacion));
-           return "{msg:'Se ha eliminado correctamente la Población}";
-       }catch(Exception e){
-        return "{msg:'Error al eliminar el Población'}";
-       }
+            msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
+        }
+       return msj;
    
    }
    //8
    public String eliminaEntidad(int identidad){
+       String msj;
        Entidad entidad = new Entidad();
         try{
            entidad=(Entidad) em.createNamedQuery("Entidad.findByIdentidad").setParameter("identidad",identidad).getSingleResult();
            em.remove(em.merge(entidad));
-           return "{msg:'Se ha eliminado correctamente la Entidad}";
-       }catch(Exception e){
-        return "{msg:'Error al eliminar la Entidad'}";
-       }
+            msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
+        }
+       return msj;
    }
    //9
    public String eliminaUsuario (int idusuario){
+       String msj;
        Usuario usuario = new Usuario();
        try{
            usuario=(Usuario) em.createNamedQuery("Usuario.findByIdusuario").setParameter("idusuario",idusuario).getSingleResult();
            em.remove(em.merge(usuario));
-           return "{msg:'Se ha eliminado correctamente el Usuario}";
-       }catch(Exception e){
-        return "{msg:'Error al eliminar el Usuario'}";
-       }
+            msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
+        }
+       return msj;
    }
    //10
    public String eliminaPais(int idpais){
+       String msj;
        Pais pais = new Pais();
        try{
            pais=(Pais) em.createNamedQuery("Pais.findByIdpais").setParameter("idpais",idpais).getSingleResult();
            em.remove(em.merge(pais));
-           return "{msg:'Se ha eliminado correctamente el País}";
-       }catch(Exception e){
-        return "{msg:'Error al eliminar el País'}";
-       }
+            msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
+        }
+       return msj;
    }
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")

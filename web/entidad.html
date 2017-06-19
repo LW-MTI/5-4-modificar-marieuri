@@ -81,6 +81,55 @@ and open the template in the editor.
                           //
                    }        
                ); // que se ejecute ya que esté listo
+       
+       //
+               function deleteEntidad(identidad) {
+
+                //Utilizando Ajax para realizar una petición al servlet que elimina personas
+                $.ajax({
+                    url: "EliminaEntidad", //Url del Servlet
+                    type: "POST", //Método HTTP por el que se hace la petición
+                    data: {//Es la información que mando al servlet
+                        identidad: identidad
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbEntidad').dataTable().api().ajax.reload();
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+            }
+                        
+                    
+
+               //
+               function nuevaEntidad() {
+                $.ajax({
+                    url: 'NuevaEntidad',
+                    type: 'POST',
+                    data: {
+                        identidad: $("#identidad").val()
+                       
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbEntidad').dataTable().api().ajax.reload();
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+
+
+            }
+
+            function showEntidad(identidad, nombreentidad) {
+                $("#identidad2").val(identidad);
+                $("#nombreentidad2").val(nombreentidad);
+                $("#modalEntidad").modal("show");
+
+            }
+               //
         </script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" >
         <!-- Latest compiled and minified CSS -->

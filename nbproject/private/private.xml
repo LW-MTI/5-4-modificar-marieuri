@@ -4,10 +4,10 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/marieuri/Documents/NetBeansProjects/LW_NayaritGuideG91/src/java/mx/edu/ittepic/edu/EJB/EJBOperaciones.java</file>
-            <file>file:/C:/Users/marieuri/Documents/NetBeansProjects/LW_NayaritGuideG91/src/java/mx/edu/ittepic/servlet/NuevoRecursoMultimedia.java</file>
-            <file>file:/C:/Users/marieuri/Documents/NetBeansProjects/LW_NayaritGuideG91/src/java/mx/edu/ittepic/nayaritguideg91/entidades/Recursosmultimedia.java</file>
+            <file>file:/C:/Users/marieuri/Documents/NetBeansProjects/LW_NayaritGuideG91/src/java/mx/edu/ittepic/servlet/EliminaVisita.java</file>
+            <file>file:/C:/Users/marieuri/Documents/NetBeansProjects/LW_NayaritGuideG91/web/visita.html</file>
+            <file>file:/C:/Users/marieuri/Documents/NetBeansProjects/LW_NayaritGuideG91/src/java/mx/edu/ittepic/servlet/NuevaVisita.java</file>
             <file>file:/C:/Users/marieuri/Documents/NetBeansProjects/LW_NayaritGuideG91/web/index.html</file>
-            <file>file:/C:/Users/marieuri/Documents/NetBeansProjects/LW_NayaritGuideG91/web/recursoMultimedia.html</file>
         </group>
     </open-files>
 </project-private>

@@ -31,8 +31,8 @@ and open the template in the editor.
                                {"data":
                                        function(row){
                                           var r=row['idusuario']+"-"+row['nombreusuario']; //Acceder 
-                                          var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteUsuarioSistema("+row['idusuario']+")'>Borrar</button>"
-                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editUsuarioSistema("+row['idusuario']+")'>Editar</button>"
+                                          var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteUsuario("+row['idusuario']+")'>Borrar</button>"
+                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editUsuario("+row['idusuario']+")'>Editar</button>"
                                           return botones;
                                        }
                                }
@@ -92,14 +92,14 @@ and open the template in the editor.
                    }        
                ); // que se ejecute ya que esté listo
                //
-               function deleteUsuarioSistema(idusuariosistema) {
+               function deleteUsuario(idusuario) {
 
                 //Utilizando Ajax para realizar una petición al servlet que elimina personas
                 $.ajax({
                     url: "EliminaUsuario", //Url del Servlet
                     type: "POST", //Método HTTP por el que se hace la petición
                     data: {//Es la información que mando al servlet
-                        idusuariosistema: idusuariosistema
+                        idusuario: idusuario
                     }
                 }).done(function (json) { //Se ejecuta cuando todo sale bien
                     alert(json.msj);
