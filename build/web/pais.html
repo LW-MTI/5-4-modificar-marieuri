@@ -11,7 +11,8 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="//code.jquery.com/jquery-1.12.4.js"> </script>
         <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-        
+        <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         
         <script>
                $(document).ready(
@@ -101,7 +102,7 @@ and open the template in the editor.
                     url: 'NuevoPais',
                     type: 'POST',
                     data: {
-                        name: $("#nombrepais").val()
+                        nombrepais: $("#nombrepais").val()
                        
                     }
                 }).done(function (json) { //Se ejecuta cuando todo sale bien
@@ -115,7 +116,7 @@ and open the template in the editor.
 
             }
 
-            function showPais(idpais, nombrepais) {
+            function showPais(nombrepais) {
                 
                 $("#nombrepais2").val(nombrepais);
                 $("#modalPais").modal("show");

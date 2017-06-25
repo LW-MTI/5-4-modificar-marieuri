@@ -11,7 +11,8 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="//code.jquery.com/jquery-1.12.4.js"> </script>
         <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-        
+        <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script> 
         
         <script>
                $(document).ready(
@@ -42,12 +43,19 @@ and open the template in the editor.
                             rules: {
                                 nombrepoblacion: {
                                     required: true
+                                },
+                                identidad:{
+                                    required: true
                                 }
+                                
                                 
                             },
                             messages: {
                                 nombrepoblacion: {
                                     required: "El nombre de la población es requerido"
+                                },
+                                identidad:{
+                                   required:"Se requiere clave Entidad."  
                                 }
                             },
                             highlight: function (element) {
@@ -98,13 +106,13 @@ and open the template in the editor.
                     
 
                //
-               function nuevoPais() {
+               function nuevaPoblacion() {
                 $.ajax({
                     url: 'NuevaPoblacion',
                     type: 'POST',
                     data: {
-                        name: $("#nombrepoblacion").val()
-                       
+                        nombrepoblacion: $("#nombrepoblacion").val(),
+                        identidad: $("#identidad").val()
                     }
                 }).done(function (json) { //Se ejecuta cuando todo sale bien
                     alert(json.msj);
@@ -145,13 +153,22 @@ and open the template in the editor.
                                 <div class="form-group">
                                     <label class="control-label" for="nombrepoblacion2">Población</label>
                                     <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                        <span class="input-group-addon">N</span>
+                                        <span class="input-group-addon">P</span>
                                         <input class="form-control" id="nombrepoblacion2" name="nombrepoblacion2">
                                         <input type="hidden" id="id" name="id">
                                     </div>
                                 </div>
                             </div>
-                            
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="identidad2">Clave entidad</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">E</span>
+                                        <input class="form-control" id="identidad2" name="identidad2" type="number">
+                                        
+                                    </div>
+                                </div>
+                            </div>
                             
                         </form>
                     </div>
@@ -171,10 +188,20 @@ and open the template in the editor.
                         <div class="form-group">
                             <label class="control-label" for="nombrepoblacion">Población</label>
                             <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                <span class="input-group-addon">N</span>
+                                <span class="input-group-addon">P</span>
                                 <input class="form-control" id="nombrepoblacion" name="nombrepoblacion">
                             </div>
                         </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="identidad">Clave entidad</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">E</span>
+                                        <input class="form-control" id="identidad" name="identidad" type="number">
+                                        
+                                    </div>
+                                </div>
                     </div>
                     
                     

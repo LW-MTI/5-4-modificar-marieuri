@@ -12,7 +12,8 @@ and open the template in the editor.
         
         <script src="//code.jquery.com/jquery-1.12.4.js"> </script>
         <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-        
+        <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <script>
                 $(document).ready(
                    function(){
@@ -109,7 +110,8 @@ and open the template in the editor.
                     url: 'NuevaEntidad',
                     type: 'POST',
                     data: {
-                        identidad: $("#identidad").val()
+                        nombreentidad: $("#nombreentidad").val(),
+                        pais: $("#idpais").val()
                        
                     }
                 }).done(function (json) { //Se ejecuta cuando todo sale bien
@@ -192,10 +194,10 @@ and open the template in the editor.
                     </div>
                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
-                            <label class="control-label" for="nombreentidad">Clave Paós</label>
+                            <label class="control-label" for="idpais">Clave País</label>
                             <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                <span class="input-group-addon">N</span>
-                                <input class="form-control" id="idpais" name="idpais">
+                                <span class="input-group-addon">P</span>
+                                <input class="form-control" id="idpais" name="idpais" type="number">
                             </div>
                         </div>
                     </div>

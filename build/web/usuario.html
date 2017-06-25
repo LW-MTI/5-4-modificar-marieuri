@@ -9,145 +9,150 @@ and open the template in the editor.
         <title>Catálogo Usuario-NayaritGuide</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="//code.jquery.com/jquery-1.12.4.js"> </script>
+        <script src="//code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-        
-        
+        <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
         <script>
-               $(document).ready(
-                   function(){
-                       $('#tbUsuario').DataTable(
-                       {
-                           "ajax":"ConsultaUsuario",
-                                                                       //http://localhost:8080/EjemploDatabases/ConsultaPersona"//"data/usuario.json", //Datasouces
-                           "columns":[    //Atributos que se pondrán en cada columna
-                               {"data":"idusuario"},
-                               {"data":"nombreusuario"},
-                               {"data":"contrasena"},
-                               {"data":"correoelectronico"},
-                              
-                               
-                               
-                               {"data":
-                                       function(row){
-                                          var r=row['idusuario']+"-"+row['nombreusuario']; //Acceder 
-                                          var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteUsuario("+row['idusuario']+")'>Borrar</button>"
-                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editUsuario("+row['idusuario']+")'>Editar</button>"
-                                          return botones;
-                                       }
-                               }
-                           ]
-                       });
-                          //document.getElementByID('tbUsuarios');
-                          
-                          //
-                          $('#frmUsuario').validate({
-                            rules: {
-                                nombreusuario: {
-                                    required: true
-                                },
-                                contrasena:{
-                                    required: true
-                                },
-                                correoelectronico:{
-                                    required:true
-                                }
-                                
-                            },
-                            messages: {
-                                nombreusuario: {
-                                    required: "El nombre del usuario es requerido"
-                                },
-                                contrasena: {
-                                    required: "La contraseña  es requerido"
-                                },
-                                correoelectronico: {
-                                    required: "El correo electrónico  es requerido"
-                                }
-                            },
-                            highlight: function (element) {
-                                $(element).closest('.form-group').addClass('has-error');
-                            },
-                            unhighlight: function (element) {
-                                $(element).closest('.form-group').removeClass('has-error');
-                            },
-                            errorElement: 'span',
-                            errorClass: 'help-block',
-                            errorPlacement: function (error, element) {
-                                if (element.parent('.input-group'.length)) {
-                                    error.insertAfter(element.parent());
-                                } else {
-                                    error.insertAfter(element)
-                                }
-                            },
-                            submitHandler: function (form) {
-                                console.log('Formulario válido');
-                                nuevoUsuario();
-                                return false;
+$(document).ready(
+        function () {
+            $('#tbUsuario').DataTable(
+                    {
+                        "ajax": "ConsultaUsuario",
+                        //http://localhost:8080/EjemploDatabases/ConsultaPersona"//"data/usuario.json", //Datasouces
+                        "columns": [//Atributos que se pondrán en cada columna
+                            {"data": "idusuario"},
+                            {"data": "nombreusuario"},
+                            {"data": "contrasena"},
+                            {"data": "correoelectronico"},
+
+                            {"data":
+                                        function (row) {
+                                            var r = row['idusuario'] + "-" + row['nombreusuario']; //Acceder 
+                                            var botones = "<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteUsuario(" + row['idusuario'] + ")'>Borrar</button>"
+                                            botones += "<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editUsuario(" + row['idusuario'] + ")'>Editar</button>"
+                                            return botones;
+                                        }
                             }
-                            
-                            
-                        });
-                          //
-                   }        
-               ); // que se ejecute ya que esté listo
-               //
-               function deleteUsuario(idusuario) {
+                        ]
+                    });
+            //document.getElementByID('tbUsuarios');
 
-                //Utilizando Ajax para realizar una petición al servlet que elimina personas
-                $.ajax({
-                    url: "EliminaUsuario", //Url del Servlet
-                    type: "POST", //Método HTTP por el que se hace la petición
-                    data: {//Es la información que mando al servlet
-                        idusuario: idusuario
+            //
+            $('#frmUsuario').validate({
+                rules: {
+                    nombreusuario: {
+                        required: true
+                    },
+                    contrasena: {
+                        required: true
+                    },
+                    correoelectronico: {
+                        required: true
+                    },
+                    idpais: {
+                        required: true
                     }
-                }).done(function (json) { //Se ejecuta cuando todo sale bien
-                    alert(json.msj);
-                    //Refrescando la tabla
-                    $('#tbUsuario').dataTable().api().ajax.reload();
-                }).fail(function (json) { //Se ejecuta cuando algo sale mal
-                    alert(json.msj);
-                });
-            }
-                        
-                    
 
-               //
-               function nuevoUsuarioSistema() {
-                $.ajax({
-                    url: 'NuevoUsuario',
-                    type: 'POST',
-                    data: {
-                        nombreusuariosistema :$("#nombreusuario").val(),
-                        nombrecompleto: $("#nombrecompleto:").val(),
-                        contra:$("#contrasena").val()
-                        
-                       
+                },
+                messages: {
+                    nombreusuario: {
+                        required: "El nombre del usuario es requerido"
+                    },
+                    contrasena: {
+                        required: "La contraseña  es requerido"
+                    },
+                    correoelectronico: {
+                        required: "El correo electrónico  es requerido"
+                    },
+                    idpais: {
+                        required: "La clave del país es requerido"
                     }
-                }).done(function (json) { //Se ejecuta cuando todo sale bien
-                    alert(json.msj);
-                    //Refrescando la tabla
-                    $('#tbUsuario').dataTable().api().ajax.reload();
-                }).fail(function (json) { //Se ejecuta cuando algo sale mal
-                    alert(json.msj);
-                });
+                },
+                highlight: function (element) {
+                    $(element).closest('.form-group').addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).closest('.form-group').removeClass('has-error');
+                },
+                errorElement: 'span',
+                errorClass: 'help-block',
+                errorPlacement: function (error, element) {
+                    if (element.parent('.input-group'.length)) {
+                       error.insertAfter(element.parent());
+                    } else {
+                        error.insertAfter(element)
+                    }
+                },
+                submitHandler: function (form) {
+                    console.log('Formulario válido');
+                    nuevoUsuario();
+                    return false;
+                }
 
 
-            }
+            });
+            //
+        }
+); // que se ejecute ya que esté listo
+//
+function deleteUsuario(idusuario) {
 
-            function showUsuarioSistema(idusuario, nombreusuario,contrasena,
-                                        correoelectronico) {
-                $("#id2").val(idusuario);
-                $("#nombreusuario2").val(nombreusuario);
-                $("#contrasena2").val(contrasena);
-                $("#correoelectronico2").val(correoelectronico);
-                
-                
-                $("#modalUsuarioSistema").modal("show");
+    //Utilizando Ajax para realizar una petición al servlet que elimina personas
+    $.ajax({
+        url: "EliminaUsuario", //Url del Servlet
+        type: "POST", //Método HTTP por el que se hace la petición
+        data: {//Es la información que mando al servlet
+            idusuario: idusuario
+        }
+    }).done(function (json) { //Se ejecuta cuando todo sale bien
+        alert(json.msj);
+        //Refrescando la tabla
+        $('#tbUsuario').dataTable().api().ajax.reload();
+    }).fail(function (json) { //Se ejecuta cuando algo sale mal
+        alert(json.msj);
+    });
+}
 
-            }
-               //
-              
+
+
+//
+function nuevoUsuario() {
+    $.ajax({
+        url: 'NuevoUsuario',
+        type: 'POST',
+        data: {
+            nombreusuario     : $("#nombreusuario").val(),
+            contrasena        : $("#contrasena").val(),
+            correoelectronico : $("#correoelectronico").val(),
+            idpais            : $("#idpais").val()
+
+        }
+    }).done(function (json) { //Se ejecuta cuando todo sale bien
+        alert(json.msj);
+        //Refrescando la tabla
+        $('#tbUsuario').dataTable().api().ajax.reload();
+    }).fail(function (json) { //Se ejecuta cuando algo sale mal
+        alert(json.msj);
+    });
+
+
+}
+
+function showUsuario(idusuario, nombreusuario, contrasena,
+        correoelectronico) {
+    
+    $("#nombreusuario2").val(nombreusuario);
+    $("#contrasena2").val(contrasena);
+    $("#correoelectronico2").val(correoelectronico);
+    $("#idpais2").val(idpais);
+
+    $("#modalUsuario2").modal("show");
+
+}
+//
+
         </script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" >
         <!-- Latest compiled and minified CSS -->
@@ -170,7 +175,7 @@ and open the template in the editor.
                                     <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
                                         <span class="input-group-addon">N</span>
                                         <input class="form-control" id="nombreusuario2" name="nombreusuario2">
-                                        <input type="hidden" id="id" name="id">
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -192,8 +197,17 @@ and open the template in the editor.
                                     </div>
                                 </div>
                             </div>
-                           
-                            
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="idpais2">Clave País</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">P</span>
+                                        <input class="form-control" id="idpais2" name="idpais2" type="number">
+                                    </div>
+                                </div>
+                            </div>
+
+
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -204,9 +218,9 @@ and open the template in the editor.
         </div>
 
         <div>
-             <h1>Usuario</h1>
-             
-             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <h1>Usuario</h1>
+
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <form class="col-lg-12" id="frmUsuario" method="POST">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="form-group">
@@ -235,32 +249,40 @@ and open the template in the editor.
                             </div>
                         </div>
                     </div>
-                    
-                    
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" for="idpais">Clave País</label>
+                            <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                <span class="input-group-addon">P</span>
+                                <input class="form-control" id="idpais" name="idpais" type="number">
+                            </div>
+                        </div>
+                    </div>
+
                     <div align="right">
                         <button type="submit" class="btn btn-primary btn-lg">Guardar</button> 
                     </div>
 
                 </form>
             </div>
-             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
+            <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <table id="tbUsuario" > 
                     <thead>
                         <tr>
-                           
-                           
+
+
                             <th>Clave</th>
                             <th>Nombre Usuario</th>
                             <th>Contrasena</th>
                             <th>Correo Electrónico</th>
                             <th>Acciones</th>
-                            
-                        
+
+
                         </tr>
-		
+
                     </thead>
                 </table>
-             </div>
+            </div>
         </div>
     </body>
 </html>

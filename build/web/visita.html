@@ -11,7 +11,8 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <script src="//code.jquery.com/jquery-1.12.4.js"> </script>
         <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-        
+        <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         
         <script>
                $(document).ready(
@@ -40,26 +41,40 @@ and open the template in the editor.
                           //
                           $('#frmVisita').validate({
                             rules: {
-                                calificacion: {
-                                    required: true
-                                },
+                                
                                 comentarios:{
                                     required: true
                                 },
+                                calificacion: {
+                                    required: true
+                                },
                                 tiposubida:{
+                                    required: true
+                                },
+                                lugarturistico:{
+                                    required: true
+                                },
+                                idusuario:{
                                     required: true
                                 }
                                 
                             },
                             messages: {
-                                calificacion: {
-                                    required: "La descripción  es requerido"
-                                },
                                 comentarios:{
                                     required: "El tipo lugar es requerido"
                                 },
+                                calificacion: {
+                                    required: "La descripción  es requerido"
+                                },
+                                
                                 tiposubida:{
                                     required: "El nombre del lugar es requerido"
+                                },
+                                lugarturistico:{
+                                    required: "Se requiere clave de lugar turístico"
+                                },
+                                idusuario:{
+                                    required: "Se requiere usuario."
                                 }
                             },
                             highlight: function (element) {
@@ -115,9 +130,12 @@ and open the template in the editor.
                     url: 'NuevaVisita',
                     type: 'POST',
                     data: {
-                        nombrelugar:("#nombrelugar").val(), 
-                        tipolugar: $("#tipolugar").val(),
-                        descripcion: $("#descripcion").val()
+                        comentarios    : $("#comentarios").val(),
+                        calificacion   : $("#calificacion").val(),
+                        tiposubida     : $("#tiposubida").val(),
+                        lugarturistico : $("#lugarturistico").val(), 
+                        
+                        idusuario       : $("#idusuario").val()
                        
                     }
                 }).done(function (json) { //Se ejecuta cuando todo sale bien
@@ -206,32 +224,50 @@ and open the template in the editor.
                         <div class="form-group">
                             <label class="control-label" for="comentarios">Comentarios</label>
                             <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                <span class="input-group-addon">N</span>
-                                <input class="form-control" id="nombrelugar" name="nombrelugar">
+                                <span class="input-group-addon">C</span>
+                                <input class="form-control" id="comentarios" name="comentarios">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <div class="form-group">
+                            <label class="control-label" for="calificacion">Calificación</label>
+                            <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                <span class="input-group-addon">F</span>
+                                <input class="form-control" id="calificacion" name="calificacion" type="number">
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="form-group">
-                                    <label class="control-label" for="tipolugar">Tipo subida</label>
+                                    <label class="control-label" for="tiposubida">Tipo subida</label>
                                     <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
                                         <span class="input-group-addon">T</span>
-                                        <input class="form-control" id="tipolugar" name="tipolugar">
+                                        <input class="form-control" id="tiposubida" name="tiposubida">
                                         
                                     </div>
                                 </div>
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="form-group">
-                                    <label class="control-label" for="calificacion">Calificación</label>
+                                    <label class="control-label" for="lugarturistico">Clave Lugar</label>
                                     <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                        <span class="input-group-addon">D</span>
-                                        <input class="form-control" id="calificacion" name="calificacion">
+                                        <span class="input-group-addon">L</span>
+                                        <input class="form-control" id="lugarturistico" name="lugarturistico">
                                         
                                     </div>
                                 </div>
                             </div>
-                    
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="idusuario">Clave Usuario</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">U</span>
+                                        <input class="form-control" id="idusuario" name="idusuario">
+                                        
+                                    </div>
+                                </div>
+                            </div>
                     
                     <div align="right">
                         <button type="submit" class="btn btn-primary btn-lg">Guardar</button> 
