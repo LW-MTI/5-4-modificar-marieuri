@@ -30,7 +30,10 @@ and open the template in the editor.
                                        function(row){
                                           var r=row['idmarca']+"-"+row['nombremarcaturistica']; //Acceder 
                                           var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteMarca("+row['idmarca']+")'>Borrar</button>"
-                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editMarca("+row['idmarca']+")'>Editar</button>"
+                                           botones += "<button id='btnEditar' class='btn btn-xs btn-danger' \n\
+                                                                     onClick='showMarcaTuristica(" + row['idmarca']
+                                                                + ",\"" + row['nombremarcaturistica'] 
+                                                                + "\")'>Editar</button>";
                                           return botones;
                                        }
                                }
@@ -70,6 +73,45 @@ and open the template in the editor.
                                 nuevaMarcaTuristica();
                                 return false;
                             }
+                            
+                        });
+                            //
+                            $('#frmMarcaTuristica2').validate({
+                            rules: {
+                                nombremarcaturistica2: {
+                                    required: true
+                                }
+                            },
+                            messages: {
+                                nombremarcaturistica2: {
+                                    required: "El nombre de la Marca Turística es requerido"
+                                }
+                            },
+                            highlight: function (element) {
+                                $(element).closest('.form-group').addClass('has-error');
+                            },
+                            unhighlight: function (element) {
+                                $(element).closest('.form-group').removeClass('has-error');
+                            },
+                            errorElement: 'span',
+                            errorClass: 'help-block',
+                            errorPlacement: function (error, element) {
+                                if (element.parent('.input-group'.length)) {
+                                    error.insertAfter(element.parent());
+                                } else {
+                                    error.insertAfter(element)
+                                }
+                            },
+                            submitHandler: function (form) {
+                                console.log('Formulario válido');
+                                updateMarcaTuristica();
+                                return false;
+                            }
+                            
+                        });
+                            //
+                            $('#btnEditar').on('click', function () {
+                            $('#frmMarcaTuristica2').submit();
                             
                             
                         });
@@ -117,14 +159,35 @@ and open the template in the editor.
 
             }
 
-            function showRol(idrol, nombrerol) {
-                $("#idmarca2").val(idrol);
-                $("#nombremarcaturistica2").val(nombrerol);
-                
+            function showMarcaTuristica(idmarca, nombremarcaturistica) {
+                $("#idmarca2").val(idmarca);
+                $("#nombremarcaturistica2").val(nombremarcaturistica);
+                $("#modalMarcaTuristica").modal("show");
 
             }
+            
+            function updateMarcaTuristica() {
+                $.ajax({
+                    url: 'ActualizaMarcaTuristica',
+                    type: 'POST',
+                    data: {
+                        idmarca              : $("#idmarca2").val(),
+                        nombremarcaturistica : $("#nombremarcaturistica2").val()
+                        
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbMarcaTuristica').dataTable().api().ajax.reload();
+                    
+                    //Cerrando el modal
+                    $('#modalMarcaTuristica').modal("toggle");
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+            }
                //
-              
+               
         </script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" >
         <!-- Latest compiled and minified CSS -->
@@ -143,11 +206,11 @@ and open the template in the editor.
                         <form class="col-lg-12" id="frmMarcaTuristica2" method="POST">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="form-group">
-                                    <label class="control-label" for="nombremarcaturistica2">Marca Turistica</label>
+                                    <label class="control-label" for="nombremarcaturistica2">Marca Turistica-Modal</label>
                                     <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                        <span class="input-group-addon">N</span>
+                                        <span class="input-group-addon">M</span>
                                         <input class="form-control" id="nombremarcaturistica2" name="nombremarcaturistica2">
-                                        <input type="hidden" id="id" name="id">
+                                        <input type="hidden" id="idmarca2" name="idmarca2">
                                     </div>
                                 </div>
                             </div>
@@ -171,7 +234,7 @@ and open the template in the editor.
                         <div class="form-group">
                             <label class="control-label" for="nombremarcaturistica">Marca Turística</label>
                             <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                <span class="input-group-addon">N</span>
+                                <span class="input-group-addon">M</span>
                                 <input class="form-control" id="nombremarcaturistica" name="nombremarcaturistica">
                             </div>
                         </div>

@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
 import javax.persistence.TransactionRequiredException;
 import mx.edu.ittepic.nayaritguideg91.entidades.Entidad;
 import mx.edu.ittepic.nayaritguideg91.entidades.Lugarturistico;
@@ -496,48 +497,43 @@ public class EJBOperaciones {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         Pais pais = new Pais();
-
+        String msj;
         try {
 
             pais.setIdpais(idpais);
             pais.setNombrepais(nombrePais);
 
             em.merge(pais);
-            return gson.toJson(pais);
-        } catch (NumberFormatException e) {
-
-            return "{msg:'Error 400 Error de tipo dato'}";
-        } catch (IllegalArgumentException e) {
-            return "{msg:'Error 422 Error no existe Entidad'}";
-
-        } catch (TransactionRequiredException e) {
-            return "{msg:'Error Se ha excedido el número de peticiones'}";
+           msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
         }
+        return msj;
 
     }
     //2
 
     public String actualizaRol(int idrol, String nombreRol) {
+        //p = entity.find(Persona.class, Integer.parseInt(id));
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         Rol rol = new Rol();
+        String msj;
 
         try {
-
+            rol = em.find(Rol.class, idrol);
             rol.setIdrol(idrol);
             rol.setNombrerol(nombreRol);
 
             em.merge(rol);
-            return gson.toJson(rol);
-        } catch (NumberFormatException e) {
-
-            return "{msg:'Error 400 Error de tipo dato'}";
-        } catch (IllegalArgumentException e) {
-            return "{msg:'Error 422 Error no existe Entidad'}";
-
-        } catch (TransactionRequiredException e) {
-            return "{msg:'Error Se ha excedido el número de peticiones'}";
+            
+         msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
         }
+        return msj;
     }
     //3
 
@@ -545,6 +541,7 @@ public class EJBOperaciones {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         Marcaturistica marca = new Marcaturistica();
+        String msj;
 
         try {
 
@@ -552,16 +549,13 @@ public class EJBOperaciones {
             marca.setNombremarcaturistica(nombreMarcaTuristica);
 
             em.merge(marca);
-            return gson.toJson(marca);
-        } catch (NumberFormatException e) {
-
-            return "{msg:'Error 400 Error de tipo dato'}";
-        } catch (IllegalArgumentException e) {
-            return "{msg:'Error 422 Error no existe Entidad'}";
-
-        } catch (TransactionRequiredException e) {
-            return "{msg:'Error Se ha excedido el número de peticiones'}";
+                
+         msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
         }
+        return msj;
     }
     //4
 
@@ -569,23 +563,21 @@ public class EJBOperaciones {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         Entidad entidad = new Entidad();
+        String msj;
 
         try {
-
+            entidad = em.find(Entidad.class, identidad);
             entidad.setIdentidad(identidad);
             entidad.setNombreentidad(nombreentidad);
 
             em.merge(entidad);
-            return gson.toJson(entidad);
-        } catch (NumberFormatException e) {
-
-            return "{msg:'Error 400 Error de tipo dato'}";
-        } catch (IllegalArgumentException e) {
-            return "{msg:'Error 422 Error no existe Entidad'}";
-
-        } catch (TransactionRequiredException e) {
-            return "{msg:'Error Se ha excedido el número de peticiones'}";
+               
+         msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
         }
+        return msj;
     }
     //5 población
 
@@ -593,6 +585,7 @@ public class EJBOperaciones {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         Poblacion poblacion = new Poblacion();
+        String msj;
 
         try {
 
@@ -600,16 +593,13 @@ public class EJBOperaciones {
             poblacion.setNombrepoblacion(nombrepoblacion);
 
             em.merge(poblacion);
-            return gson.toJson(poblacion);
-        } catch (NumberFormatException e) {
-
-            return "{msg:'Error 400 Error de tipo dato'}";
-        } catch (IllegalArgumentException e) {
-            return "{msg:'Error 422 Error no existe Entidad'}";
-
-        } catch (TransactionRequiredException e) {
-            return "{msg:'Error Se ha excedido el número de peticiones'}";
+               
+         msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
         }
+        return msj;
     }
 
     //6 lugarturistico
@@ -618,6 +608,7 @@ public class EJBOperaciones {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         Lugarturistico lugar = new Lugarturistico();
+        String msj;
 
         try {
 
@@ -627,16 +618,13 @@ public class EJBOperaciones {
             lugar.setTipolugar(tipolugar);
 
             em.merge(lugar);
-            return gson.toJson(lugar);
-        } catch (NumberFormatException e) {
-
-            return "{msg:'Error 400 Error de tipo dato'}";
-        } catch (IllegalArgumentException e) {
-            return "{msg:'Error 422 Error no existe Entidad'}";
-
-        } catch (TransactionRequiredException e) {
-            return "{msg:'Error Se ha excedido el número de peticiones'}";
+                
+         msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
         }
+        return msj;
     }
 
     //7 recursosmultimedia
@@ -644,56 +632,51 @@ public class EJBOperaciones {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         Recursosmultimedia recurso = new Recursosmultimedia();
+        String msj;
         try {
 
             recurso.setIdrecurso(idrecurso);
             recurso.setDescripcion(descripcion);
 
             em.merge(recurso);
-            return gson.toJson(recurso);
-        } catch (NumberFormatException e) {
-
-            return "{msg:'Error 400 Error de tipo dato'}";
-        } catch (IllegalArgumentException e) {
-            return "{msg:'Error 422 Error no existe Entidad'}";
-
-        } catch (TransactionRequiredException e) {
-            return "{msg:'Error Se ha excedido el número de peticiones'}";
+                
+         msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
         }
+        return msj;
 
     }
 
     //8 usuario
     public String actualizaUsuario(int idusuario, String nombreusuario,
-            String contrasena, String correoelectronico, int idpais) {
+            String contrasena, String correoelectronico) {
 
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         Usuario usuario = new Usuario();
+        String msj;
 
         try {
-            Pais pais = new Pais();
-            pais = (Pais) em.createNamedQuery("Pais.findByIdpais").setParameter("idpais", idpais).getSingleResult();
-            pais.setUsuarioList(null);
+            //Pais pais = new Pais();
+           // pais = (Pais) em.createNamedQuery("Pais.findByIdpais").setParameter("idpais", idpais).getSingleResult();
+            //pais.setUsuarioList(null);
             usuario.setIdusuario(idusuario);
             usuario.setContrasena(contrasena);
             usuario.setNombreusuario(nombreusuario);
             usuario.setCorreoelectronico(correoelectronico);
-            usuario.setIdpais(pais);
+            //usuario.setIdpais(pais);
             usuario.setVisitaList(null);
 
             em.merge(usuario);
-            return "{msg:'Se ha actualizado el Usuario'}";
-            //return gson.toJson(usuario);
-        } catch (NumberFormatException e) {
-
-            return "{msg:'Error 400 Error de tipo dato'}";
-        } catch (IllegalArgumentException e) {
-            return "{msg:'Error 422 Error no existe Entidad'}";
-
-        } catch (TransactionRequiredException e) {
-            return "{msg:'Error Se ha excedido el número de peticiones'}";
+                
+         msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
         }
+        return msj;
     }
 
     //9 usuariosistema
@@ -704,6 +687,7 @@ public class EJBOperaciones {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         Usuariosistema usuarioS = new Usuariosistema();
+        String msj;
 
         try {
 
@@ -714,16 +698,13 @@ public class EJBOperaciones {
             usuarioS.setVigente(vigente);
 
             em.merge(usuarioS);
-            return gson.toJson(usuarioS);
-        } catch (NumberFormatException e) {
-
-            return "{msg:'Error 400 Error de tipo dato'}";
-        } catch (IllegalArgumentException e) {
-            return "{msg:'Error 422 Error no existe Entidad'}";
-
-        } catch (TransactionRequiredException e) {
-            return "{msg:'Error Se ha excedido el número de peticiones'}";
+                
+         msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
         }
+        return msj;
     }
 
     //10 visita
@@ -735,6 +716,7 @@ public class EJBOperaciones {
         GsonBuilder builder = new GsonBuilder();
         Gson gson = builder.create();
         Visita visita = new Visita();
+        String msj;
 
         try {
 
@@ -756,18 +738,13 @@ public class EJBOperaciones {
             em.merge(visita);
             //return gson.toJson(visita);
             // 
-            return "{msg:'Se ha insertado la visita'}";
-        } catch (NumberFormatException e) {
-
-            return "{msg:'Error 400 Error de tipo dato'}";
-        } catch (IllegalArgumentException e) {
-            return "{msg:'Error 422 Error no existe Entidad'}";
-
-        } catch (TransactionRequiredException e) {
-            return "{msg:'Error Se ha excedido el número de peticiones'}";
-        } catch (Exception e) {
-            return "msg: 'Error en Visita'";
+                
+         msj = "{\"code\":200, \"msj\":\"La operación se realizó correctamente\"}";
+            
+        } catch(NumberFormatException e) {
+            msj = "{\"code\":400, \"msj\":\"Error en los tipos de parámetros\"}";
         }
+        return msj;
 
     }
 

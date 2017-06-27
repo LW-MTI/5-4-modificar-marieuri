@@ -29,7 +29,10 @@ and open the template in the editor.
                                        function(row){
                                           var r=row['idrol']+"-"+row['nombrerol']; //Acceder 
                                           var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteRol("+row['idrol']+")'>Borrar</button>"
-                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editRol("+row['idrol']+")'>Editar</button>"
+                                          botones += "<button id='btnEditar' class='btn btn-xs btn-danger' \n\
+                                                                     onClick='showRol(" + row['idrol']
+                                                                + ",\"" + row['nombrerol'] 
+                                                                + "\")'>Editar</button>";
                                           return botones;
                                        }
                                }
@@ -71,6 +74,46 @@ and open the template in the editor.
                             }
                             
                             
+                        });
+                          //
+                        $('#frmRol2').validate({
+                            rules: {
+                                
+                                nombrerol2: {
+                                    required: true
+                                }
+                            },
+                            messages: {
+                                nombrerol2: {
+                                    required: "El nombre del rol es requerido"
+                                }
+                            },
+                            highlight: function (element) {
+                                $(element).closest('.form-group').addClass('has-error');
+                            },
+                            unhighlight: function (element) {
+                                $(element).closest('.form-group').removeClass('has-error');
+                            },
+                            errorElement: 'span',
+                            errorClass: 'help-block',
+                            errorPlacement: function (error, element) {
+                                if (element.parent('.input-group'.length)) {
+                                    error.insertAfter(element.parent());
+                                } else {
+                                    error.insertAfter(element)
+                                }
+                            },
+                            submitHandler: function (form) {
+                                console.log('Formulario modal válido');
+                                updateRol();
+                                return false;
+                            }
+                            
+                            
+                        });  
+                          //
+                          $('#btnEditar').on('click', function () {
+                            $('#frmRol2').submit();
                         });
                           //
                    }        
@@ -120,10 +163,31 @@ and open the template in the editor.
             }
 
             function showRol(idrol, nombrerol) {
-               
+                $("#idrol2").val(idrol);
                 $("#nombrerol2").val(nombrerol);
                 $("#modalRol").modal("show");
 
+            }
+            
+            function updateRol() {
+                $.ajax({
+                    url: 'ActualizaUsuarioSistema',
+                    type: 'POST',
+                    data: {
+                        idusuariosistema     : $("#idrol2").val(),
+                        nombrerol : $("#nombrerol2").val()
+                        
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbRol').dataTable().api().ajax.reload();
+                    
+                    //Cerrando el modal
+                    $('#modalRol').modal("toggle");
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
             }
                //
               
@@ -147,9 +211,9 @@ and open the template in the editor.
                                 <div class="form-group">
                                     <label class="control-label" for="nombrerol2">Rol</label>
                                     <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                        <span class="input-group-addon">N</span>
+                                        <span class="input-group-addon">R</span>
                                         <input class="form-control" id="nombrerol2" name="nombrerol2">
-                                        <input type="hidden" id="id" name="id">
+                                        <input  id="idrol2" name="idrol2">
                                     </div>
                                 </div>
                             </div>
@@ -173,7 +237,7 @@ and open the template in the editor.
                         <div class="form-group">
                             <label class="control-label" for="nombrerol">Rol</label>
                             <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                <span class="input-group-addon">N</span>
+                                <span class="input-group-addon">R</span>
                                 <input class="form-control" id="nombrerol" name="nombrerol">
                             </div>
                         </div>

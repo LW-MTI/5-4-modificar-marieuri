@@ -30,7 +30,10 @@ and open the template in the editor.
                                        function(row){
                                           var r=row['idpoblacion']+"-"+row['nombrepoblacion']; //Acceder 
                                           var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deletePoblacion("+row['idpoblacion']+")'>Borrar</button>"
-                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editPoblacion("+row['idpoblacion']+")'>Editar</button>"
+                                          botones += "<button id='btnEditar' class='btn btn-xs btn-danger' \n\
+                                                                     onClick='showPoblacion(" + row['idpoblacion']
+                                                                + ",\"" + row['nombrepoblacion'] 
+                                                                + "\")'>Editar</button>";
                                           return botones;
                                        }
                                }
@@ -82,6 +85,49 @@ and open the template in the editor.
                             
                         });
                           //
+                        $('#frmPoblacion2').validate({
+                            rules: {
+                                nombrepoblacion2: {
+                                    required: true
+                                }
+                                
+                                
+                            },
+                            messages: {
+                                nombrepoblacion2: {
+                                    required: "El nombre de la población es requerido"
+                                }
+                            },
+                            highlight: function (element) {
+                                $(element).closest('.form-group').addClass('has-error');
+                            },
+                            unhighlight: function (element) {
+                                $(element).closest('.form-group').removeClass('has-error');
+                            },
+                            errorElement: 'span',
+                            errorClass: 'help-block',
+                            errorPlacement: function (error, element) {
+                                if (element.parent('.input-group'.length)) {
+                                    error.insertAfter(element.parent());
+                                } else {
+                                    error.insertAfter(element)
+                                }
+                            },
+                            submitHandler: function (form) {
+                                console.log('Formulario válido');
+                                updatePoblacion();
+                                return false;
+                            }
+                            
+                            
+                        });
+                         //
+                        $('#btnEditar').on('click', function () {
+                            $('#frmPoblacion2').submit();
+                            
+                            
+                        });
+                         //
                    }        
                ); // que se ejecute ya que esté listo
                //
@@ -125,11 +171,31 @@ and open the template in the editor.
 
             }
 
-            function showPais(idpais, nombrepais) {
-                
-                $("#nombrepoblacion2").val(nombrepais);
+            function showPoblacion(idpoblacion, nombrepoblacion) {
+                $("#idpoblacion2").val(idpoblacion);
+                $("#nombrepoblacion2").val(nombrepoblacion);
                 $("#modalPoblacion").modal("show");
 
+            }
+            function updatePoblacion() {
+                $.ajax({
+                    url: 'ActualizaPoblacion',
+                    type: 'POST',
+                    data: {
+                        idpoblacion      : $("#idpoblacion2").val(),
+                        nombrepoblacion  : $("#nombrepoblacion2").val()
+                        
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbPoblacion').dataTable().api().ajax.reload();
+                    
+                    //Cerrando el modal
+                    $('#modalPoblacion').modal("toggle");
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
             }
                //
               
@@ -155,20 +221,11 @@ and open the template in the editor.
                                     <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
                                         <span class="input-group-addon">P</span>
                                         <input class="form-control" id="nombrepoblacion2" name="nombrepoblacion2">
-                                        <input type="hidden" id="id" name="id">
+                                        <input type="hidden" id="idpoblacion2" name="idpoblacion2">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label class="control-label" for="identidad2">Clave entidad</label>
-                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                        <span class="input-group-addon">E</span>
-                                        <input class="form-control" id="identidad2" name="identidad2" type="number">
-                                        
-                                    </div>
-                                </div>
-                            </div>
+                            
                             
                         </form>
                     </div>

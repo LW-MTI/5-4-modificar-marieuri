@@ -30,7 +30,15 @@ and open the template in the editor.
                                        function(row){
                                           var r=row['idvisita']+"-"+row['calificación']; //Acceder 
                                           var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteVisita("+row['idvisita']+")'>Borrar</button>"
-                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editVisita("+row['idvisita']+")'>Editar</button>"
+                                          
+                                          botones += "<button id='btnEditar' class='btn btn-xs btn-danger' \n\
+                                                                    onClick='showVisita(" + row['idvisita']
+                                                                + ","   + row['calificacion'] 
+                                                                + ",\"" + row['comentarios'] + "\""
+                                                                + ","   + row['tiposubida'] 
+                                                                + ","   + row['idusuario'] 
+                                                                + ","   + row['idlugarturistico'] 
+                                                                + ")'>Editar</button>";
                                           return botones;
                                        }
                                }
@@ -101,6 +109,74 @@ and open the template in the editor.
                             
                         });
                           //
+                        $('#frmVisita2').validate({
+                            rules: {
+                                
+                                comentarios2:{
+                                    required: true
+                                },
+                                calificacion2: {
+                                    required: true
+                                },
+                                tiposubida2:{
+                                    required: true
+                                },
+                                lugarturistico2:{
+                                    required: true
+                                },
+                                idusuario2:{
+                                    required: true
+                                }
+                                
+                            },
+                            messages: {
+                                comentarios2:{
+                                    required: "El tipo lugar es requerido"
+                                },
+                                calificacion2: {
+                                    required: "La descripción  es requerido"
+                                },
+                                
+                                tiposubida2:{
+                                    required: "El nombre del lugar es requerido"
+                                },
+                                lugarturistico2:{
+                                    required: "Se requiere clave de lugar turístico"
+                                },
+                                idusuario2:{
+                                    required: "Se requiere usuario."
+                                }
+                            },
+                            highlight: function (element) {
+                                $(element).closest('.form-group').addClass('has-error');
+                            },
+                            unhighlight: function (element) {
+                                $(element).closest('.form-group').removeClass('has-error');
+                            },
+                            errorElement: 'span',
+                            errorClass: 'help-block',
+                            errorPlacement: function (error, element) {
+                                if (element.parent('.input-group'.length)) {
+                                    error.insertAfter(element.parent());
+                                } else {
+                                    error.insertAfter(element)
+                                }
+                            },
+                            submitHandler: function (form) {
+                                console.log('Formulario válido');
+                                updateVisita();
+                                return false;
+                            }
+                            
+                            
+                        });
+                          //
+                        $('#btnEditar').on('click', function () {
+                            $('#frmVisita2').submit();
+                            
+                            
+                        });
+                          //
                    }        
                ); // que se ejecute ya que esté listo
                //
@@ -149,15 +225,43 @@ and open the template in the editor.
 
             }
 
-            function showVisita( calificacion,comentarios, tiposubida) {
-                
+            function showVisita( idvisita,calificacion,comentarios, tiposubida,
+                    idusuario, idlugarturistico) {
+                $("#idvisita2").val(idvisita);
                 $("#calificacion2").val(calificacion);
                 $("#comentarios2").val(comentarios);
                 $("#tiposubida2").val(tiposubida);
-                $("#modalPais").modal("show");
+                $("#idusuario2").val(idusuario);
+                $("#idlugarturistico2").val(idlugarturistico);
+                $("#modalVisita").modal("show");
 
             }
                //
+            function updateVisita() {
+                $.ajax({
+                    url: 'ActualizaVisita',
+                    type: 'POST',
+                    data: {
+                        idvisita            : $("#idvisita2").val(),
+                        calificacion        : $("#calificacion2").val(),
+                        comentarios         : $("#comentarios2").val(),
+                        tiposubida          : $("#tiposubida2").val(),
+                        idusuario           : $("#idusuario2").val(),
+                        idlugarturistico    : $("#idlugarturistico2").val()
+                        
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbVisita').dataTable().api().ajax.reload();
+                    
+                    //Cerrando el modal
+                    $('#modalVisita').modal("toggle");
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                    //alert("error");
+                });
+            }
               
         </script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" >
@@ -165,7 +269,7 @@ and open the template in the editor.
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     </head>
     <body>
-        <div id="modalPais" class="modal">
+        <div id="modalVisita" class="modal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -181,7 +285,7 @@ and open the template in the editor.
                                     <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
                                         <span class="input-group-addon">C</span>
                                         <input class="form-control" id="comentarios2" name="comentarios2">
-                                        <input type="hidden" id="id" name="id">
+                                        <input type="hidden" id="idvisita2" name="idvisita2">
                                     </div>
                                 </div>
                             </div>
@@ -205,7 +309,26 @@ and open the template in the editor.
                                     </div>
                                 </div>
                             </div>
-                            
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="idusuario2">Clave usuario</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">U</span>
+                                        <input class="form-control" id="idusuario2" name="idusuario2">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="idusuario2">Clave lugar turistico</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">T</span>
+                                        <input class="form-control" id="idlugarturistico2" name="idlugarturistico2">
+                                        
+                                    </div>
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer">

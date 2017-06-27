@@ -30,7 +30,10 @@ and open the template in the editor.
                                        function(row){
                                           var r=row['identidad']+"-"+row['nombreentidad']; //Acceder 
                                           var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteEntidad("+row['identidad']+")'>Borrar</button>"
-                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editEntidad("+row['identidad']+")'>Editar</button>"
+                                          botones += "<button id='btnEditar' class='btn btn-xs btn-danger' \n\
+                                                                     onClick='showEntidad(" + row['identidad']
+                                                                + ",\"" + row['nombreentidad'] 
+                                                                + "\")'>Editar</button>";
                                           return botones;
                                        }
                                }
@@ -80,6 +83,45 @@ and open the template in the editor.
                             
                         });
                           //
+                          $('#frmEntidad2').validate({
+                            rules: {
+                                nombreentidad2: {
+                                    required: true
+                                }
+                            },
+                            messages: {
+                                nombreentidad2: {
+                                    required: "El nombre de la entidad es requerido"
+                                }
+                            },
+                            highlight: function (element) {
+                                $(element).closest('.form-group').addClass('has-error');
+                            },
+                            unhighlight: function (element) {
+                                $(element).closest('.form-group').removeClass('has-error');
+                            },
+                            errorElement: 'span',
+                            errorClass: 'help-block',
+                            errorPlacement: function (error, element) {
+                                if (element.parent('.input-group'.length)) {
+                                    error.insertAfter(element.parent());
+                                } else {
+                                    error.insertAfter(element)
+                                }
+                            },
+                            submitHandler: function (form) {
+                                console.log('Formulario válido');
+                                updateEntidad();
+                                return false;
+                            }
+                            
+                            
+                        });
+                        $('#btnEditar').on('click', function () {
+                            $('#frmEntidad2').submit();
+                            
+                            
+                        });
                    }        
                ); // que se ejecute ya que esté listo
        
@@ -131,6 +173,27 @@ and open the template in the editor.
                 $("#modalEntidad").modal("show");
 
             }
+            
+            function updateEntidad() {
+                $.ajax({
+                    url: 'ActulizaEntidad',
+                    type: 'POST',
+                    data: {
+                        identidad      : $("#identidad2").val(),
+                        nombreentidad  : $("#nombreentidad2").val()
+                        
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbEntidad').dataTable().api().ajax.reload();
+                    
+                    //Cerrando el modal
+                    $('#modalEntidad').modal("toggle");
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+            }
                //
         </script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" >
@@ -144,30 +207,21 @@ and open the template in the editor.
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"
                                 aria-hidden="true">&times;</button>
-                        <h3>Modificar Pais</h3>
+                        <h3>Modificar Entidad</h3>
                     </div>
                     <div class="modal-body">
                         <form class="col-lg-12" id="frmEntidad2" method="POST">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="form-group">
-                                    <label class="control-label" for="nombreentidad2">Nombre</label>
+                                    <label class="control-label" for="nombreentidad2">Nombre entidad</label>
                                     <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                        <span class="input-group-addon">N</span>
+                                        <span class="input-group-addon">E</span>
                                         <input class="form-control" id="nombreentidad2" name="nombreentidad2">
-                                        <input type="hidden" id="id" name="id">
+                                        <input type="hidden" id="identidad2" name="identidad2">
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label class="control-label" for="nombrepais2">clave País</label>
-                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                        <span class="input-group-addon">N</span>
-                                        <input class="form-control" id="idpais2" name="idpais2">
-                                        <input type="hidden" id="id2" name="id2">
-                                    </div>
-                                </div>
-                            </div>
+                            
                             
                         </form>
                     </div>
@@ -187,7 +241,7 @@ and open the template in the editor.
                         <div class="form-group">
                             <label class="control-label" for="nombreentidad">Entidad</label>
                             <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                <span class="input-group-addon">N</span>
+                                <span class="input-group-addon">E</span>
                                 <input class="form-control" id="nombreentidad" name="nombreentidad">
                             </div>
                         </div>

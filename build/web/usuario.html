@@ -26,12 +26,18 @@ $(document).ready(
                             {"data": "nombreusuario"},
                             {"data": "contrasena"},
                             {"data": "correoelectronico"},
-
+                            
                             {"data":
                                         function (row) {
                                             var r = row['idusuario'] + "-" + row['nombreusuario']; //Acceder 
                                             var botones = "<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteUsuario(" + row['idusuario'] + ")'>Borrar</button>"
-                                            botones += "<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editUsuario(" + row['idusuario'] + ")'>Editar</button>"
+                                            botones += "<button id='btnEditar' class='btn btn-xs btn-warning' \n\
+                                                                    onClick='showUsuario(" + row['idusuario']
+                                                                + ",\"" + row['nombreusuario'] + "\""
+                                                                + ",\"" + row['contrasena'] + "\""
+                                                                + ",\"" + row['correoelectronico'] + "\""
+                                                                
+                                                                + ")'>Editar</button>";
                                             return botones;
                                         }
                             }
@@ -94,6 +100,59 @@ $(document).ready(
 
             });
             //
+            $('#frmUsuario2').validate({
+                rules: {
+                    nombreusuario2: {
+                        required: true
+                    },
+                    contrasena2: {
+                        required: true
+                    },
+                    correoelectronico2: {
+                        required: true
+                    }
+
+                },
+                messages: {
+                    nombreusuario2: {
+                        required: "El nombre del usuario es requerido"
+                    },
+                    contrasena2: {
+                        required: "La contraseña  es requerido"
+                    },
+                    correoelectronico2: {
+                        required: "El correo electrónico  es requerido"
+                    }
+                },
+                highlight: function (element) {
+                    $(element).closest('.form-group').addClass('has-error');
+                },
+                unhighlight: function (element) {
+                    $(element).closest('.form-group').removeClass('has-error');
+                },
+                errorElement: 'span',
+                errorClass: 'help-block',
+                errorPlacement: function (error, element) {
+                    if (element.parent('.input-group'.length)) {
+                       error.insertAfter(element.parent());
+                    } else {
+                        error.insertAfter(element)
+                    }
+                },
+                submitHandler: function (form) {
+                    console.log('Formulario válido');
+                    updateUsuario();
+                    return false;
+                }
+
+
+            });
+            //
+            $('#btnEditar').on('click', function () {
+                            $('#frmUsuario2').submit();
+                            
+                            
+                        });
         }
 ); // que se ejecute ya que esté listo
 //
@@ -142,15 +201,37 @@ function nuevoUsuario() {
 
 function showUsuario(idusuario, nombreusuario, contrasena,
         correoelectronico) {
-    
+    $("#idusuario2").val(idusuario);
     $("#nombreusuario2").val(nombreusuario);
     $("#contrasena2").val(contrasena);
     $("#correoelectronico2").val(correoelectronico);
-    $("#idpais2").val(idpais);
+    
 
-    $("#modalUsuario2").modal("show");
+    $("#modalUsuario").modal("show");
 
 }
+function updateUsuario() {
+                $.ajax({
+                    url: 'ActualizaUsuario',
+                    type: 'POST',
+                    data: {
+                        idusuario          : $("#idusuario2").val(),
+                        nombreusuario       : $("#nombreusuario2").val(),
+                        contrasena         : $("#contrasena2").val(),
+                        correoelectronico  : $("#correoelectronico2").val()
+                        
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbUsuario').dataTable().api().ajax.reload();
+                    
+                    //Cerrando el modal
+                    $('#modalUsuario').modal("toggle");
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+            }
 //
 
         </script>
@@ -165,16 +246,17 @@ function showUsuario(idusuario, nombreusuario, contrasena,
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal"
                                 aria-hidden="true">&times;</button>
-                        <h3>Modificar Usuario Sistema</h3>
+                        <h3>Modificar Usuario</h3>
                     </div>
                     <div class="modal-body">
                         <form class="col-lg-12" id="frmUsuario2" method="POST">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="form-group">
-                                    <label class="control-label" for="nombreusuario2">Rol</label>
+                                    <label class="control-label" for="nombreusuario2">Nombre usuario</label>
                                     <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
                                         <span class="input-group-addon">N</span>
                                         <input class="form-control" id="nombreusuario2" name="nombreusuario2">
+                                        <input type="hidden" id="idusuario2" name="idusuario2">
                                         
                                     </div>
                                 </div>
@@ -197,15 +279,7 @@ function showUsuario(idusuario, nombreusuario, contrasena,
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label class="control-label" for="idpais2">Clave País</label>
-                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                        <span class="input-group-addon">P</span>
-                                        <input class="form-control" id="idpais2" name="idpais2" type="number">
-                                    </div>
-                                </div>
-                            </div>
+                            
 
 
                         </form>

@@ -87,11 +87,11 @@ public class ActualizaUsuario extends HttpServlet {
         String nombreusuario=request.getParameter("nombreusuario");
         String contrasena=request.getParameter("contrasena");
         String correoelectronico=request.getParameter("correoelectronico");
-        int idpais= Integer.parseInt(request.getParameter("idpais"));
+        //int idpais= Integer.parseInt(request.getParameter("idpais"));
        
        
       
-       p.write(ejb.actualizaUsuario(idusuario,nombreusuario,contrasena,correoelectronico,idpais));
+       p.write(ejb.actualizaUsuario(idusuario,nombreusuario,contrasena,correoelectronico));
     }
 
     /**

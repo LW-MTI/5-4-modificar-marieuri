@@ -30,7 +30,13 @@ and open the template in the editor.
                                        function(row){
                                           var r=row['idlugarturistico']+"-"+row['nombrelugar']; //Acceder 
                                           var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteLugarTuristico("+row['idlugarturistico']+")'>Borrar</button>"
-                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editLugarTuristico("+row['idlugarturistico']+")'>Editar</button>"
+                                           botones += "<button id='btnEditar' class='btn btn-xs btn-danger' \n\
+                                                                    onClick='showLugarTuristico(" + row['idlugarturistico']
+                                                                + ",\"" + row['nombrelugar'] + "\""
+                                                                + ",\"" + row['descripcion'] + "\""
+                                                                + ",\"" + row['tipolugar'] + "\""
+                                                                
+                                                                + ")'>Editar</button>";
                                           return botones;
                                        }
                                }
@@ -41,6 +47,7 @@ and open the template in the editor.
                           //
                           $('#frmLugarTuristico').validate({
                             rules: {
+                                
                                 descripcion: {
                                     required: true
                                 },
@@ -93,6 +100,62 @@ and open the template in the editor.
                             
                         });
                           //
+                          $('#frmLugarTuristico2').validate({
+                            rules: {
+                                nombrelugar2:{
+                                    required: true
+                                },
+                                descripcion2: {
+                                    required: true
+                                },
+                                
+                                tipolugar2:{
+                                    required: true
+                                }
+                                
+                                
+                            },
+                            messages: {
+                                nombrelugar2:{
+                                    required: "El nombre del lugar es requerido"
+                                },
+                                descripcion2: {
+                                    required: "La descripción  es requerido"
+                                },
+                                tipolugar2:{
+                                    required: "El tipo lugar es requerido"
+                                }
+                                
+                            },
+                            highlight: function (element) {
+                                $(element).closest('.form-group').addClass('has-error');
+                            },
+                            unhighlight: function (element) {
+                                $(element).closest('.form-group').removeClass('has-error');
+                            },
+                            errorElement: 'span',
+                            errorClass: 'help-block',
+                            errorPlacement: function (error, element) {
+                                if (element.parent('.input-group'.length)) {
+                                    error.insertAfter(element.parent());
+                                } else {
+                                    error.insertAfter(element)
+                                }
+                            },
+                            submitHandler: function (form) {
+                                console.log('Formulario válido');
+                                updateLugarTuristico();
+                                return false;
+                            }
+                            
+                            
+                        });
+                          //
+                          $('#btnEditar').on('click', function () {
+                            $('#frmLugarTuristico2').submit();
+                            
+                            
+                        });
                    }        
                ); // que se ejecute ya que esté listo
                //
@@ -141,15 +204,38 @@ and open the template in the editor.
 
             }
 
-            function showLugarTuristico( nombrelugar, tipolugar, descripcion) {
-                
+            function showLugarTuristico(idlugarturistico, nombrelugar, descripcion,tipolugar ) {
+                $("#idlugarturistico2").val(idlugarturistico);
                 $("#nombrelugar2").val(nombrelugar);
                 $("#tipolugar2").val(tipolugar);
                 $("#descripcion2").val(descripcion);
-                $("#modalPais").modal("show");
+                $("#modalLugarTuristico").modal("show");
 
             }
                //
+               function updateLugarTuristico() {
+                $.ajax({
+                    url: 'ActualizaLugarTuristico',
+                    type: 'POST',
+                    data: {
+                        idlugar     : $("#idlugarturistico2").val(),
+                        nombreLugar  : $("#nombrelugar2").val(),
+                        descripcion  : $("#descripcion2").val(),
+                        tipolugar    : $("#tipolugar2").val()
+                        
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbLugarTuristico').dataTable().api().ajax.reload();
+                    
+                    //Cerrando el modal
+                    $('#modalLugarTuristico').modal("toggle");
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    //alert(json.msj);
+                    alert("error");
+                });
+            }
               
         </script>
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css" >
@@ -157,7 +243,7 @@ and open the template in the editor.
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     </head>
     <body>
-        <div id="modalPais" class="modal">
+        <div id="modalLugarTuristico" class="modal">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -169,31 +255,11 @@ and open the template in the editor.
                         <form class="col-lg-12" id="frmLugarTuristico2" method="POST">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="form-group">
-                                    <label class="control-label" for="nombrelugar2">Nombre</label>
+                                    <label class="control-label" for="nombrelugar2">Nombre lugar</label>
                                     <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
                                         <span class="input-group-addon">N</span>
                                         <input class="form-control" id="nombrelugar2" name="nombrelugar2">
-                                        <input type="hidden" id="id" name="id">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label class="control-label" for="tipolugar2">Tipo Lugar</label>
-                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                        <span class="input-group-addon">T</span>
-                                        <input class="form-control" id="tipolugar2" name="tipolugar2">
-                                        
-                                    </div>
-                                </div>
-                            </div>
-                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label class="control-label" for="idmarca2">Clave Marca</label>
-                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                        <span class="input-group-addon">M</span>
-                                        <input class="form-control" id="idmarca2" name="idmarca2">
-                                        
+                                        <input type="hidden" id="idlugarturistico2" name="idlugarturistico2">
                                     </div>
                                 </div>
                             </div>
@@ -207,7 +273,18 @@ and open the template in the editor.
                                     </div>
                                 </div>
                             </div>
-                            
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
+                                    <label class="control-label" for="tipolugar2">Tipo Lugar</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">T</span>
+                                        <input class="form-control" id="tipolugar2" name="tipolugar2">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                             
+                                                        
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -218,7 +295,7 @@ and open the template in the editor.
         </div>
 
         <div>
-             <h1>Lugar turístico </h1>
+             <h1>Lugar turístico</h1>
              
              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-12">
                 <form class="col-lg-12" id="frmLugarTuristico" method="POST">

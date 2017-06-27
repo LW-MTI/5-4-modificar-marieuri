@@ -34,8 +34,18 @@ and open the template in the editor.
                                        function(row){
                                           var r=row['idusuariosistema']+"-"+row['nombreusuariosistema']; //Acceder 
                                           var botones="<button id='btnBorrar' class='btn btn-primary btn-xs' onClick='deleteUsuarioSistema("+row['idusuariosistema']+")'>Borrar</button>"
-                                          botones+="<button id='btnEditar' class='btn btn-danger btn-xs' onClick='editUsuarioSistema("+row['idusuariosistema']+")'>Editar</button>"
+                                           botones += "<button id='btnEditar' class='btn btn-xs btn-danger' \n\
+                                                                     onClick='showUsuarioSistema(" + row['idusuariosistema']
+                                                                + ",\"" + row['nombreusuariosistema']+ "\""
+                                                                + ",\"" + row['nombrecompleto']+ "\""
+                                                                + ",\"" + row['contra']+ "\""
+                                                                + ",\"" + row['vigente']
+                                                                + "\")'>Editar</button>";
                                           return botones;
+                                          /*
+                                           *idusuariosistema, idusuariosistema,vigente,
+                                        idrol,contra
+                                           */
                                        }
                                }
                            ]
@@ -101,7 +111,70 @@ and open the template in the editor.
                             
                             
                         });
+                          //Forma Modal
+                          $('#frmUsuarioSistema2').validate({
+                            rules: {
+                                nombreusuariosistema2: {
+                                    required: true
+                                },
+                                nombrecompleto2:{
+                                    required: true
+                                },
+                                vigente2:{
+                                    required:true
+                                },
+                                idrol2:{
+                                    required:true
+                                },
+                                contra2:{
+                                    required:true
+                                }
+                            },
+                            messages: {
+                                nombreusuariosistema2: {
+                                    required: "El nombre del usuario es requerido"
+                                },
+                                nombrecompleto2: {
+                                    required: "El nombre completo es requerido"
+                                },
+                                vigente2: {
+                                    required: "El campo vigente es requerido"
+                                },
+                                idrol2: {
+                                    required: "El Rol del usuario es requerido"
+                                },
+                                contra2: {
+                                    required: "La contraseña es requerido"
+                                }
+                            },
+                            highlight: function (element) {
+                                $(element).closest('.form-group').addClass('has-error');
+                            },
+                            unhighlight: function (element) {
+                                $(element).closest('.form-group').removeClass('has-error');
+                            },
+                            errorElement: 'span',
+                            errorClass: 'help-block',
+                            errorPlacement: function (error, element) {
+                                if (element.parent('.input-group'.length)) {
+                                    error.insertAfter(element.parent());
+                                } else {
+                                    error.insertAfter(element)
+                                }
+                            },
+                            submitHandler: function (form) {
+                                console.log('Formulario válido');
+                                updateUsuarioSistema();
+                                return false;
+                            }
+                            
+                            
+                        });
+                          
                           //
+                          $('#btnEditar').on('click', function () {
+                            $('#frmUsuarioSistema2').submit();
+                        });
                    }        
                ); // que se ejecute ya que esté listo
                //
@@ -132,9 +205,9 @@ and open the template in the editor.
                     type: 'POST',
                     data: {
                         nombreusuariosistema :$("#nombreusuariosistema").val(),
-                        nombrecompleto: $("#nombrecompleto").val(),
-                        idrol:$("#idrol").val(),
-                        contra:$("#contra").val()
+                        nombrecompleto:       $("#nombrecompleto").val(),
+                        idrol:                $("#idrol").val(),
+                        contra:               $("#contra").val()
                         
                         
                        
@@ -150,17 +223,43 @@ and open the template in the editor.
 
             }
 
-            function showUsuarioSistema(idusuariosistema, idusuariosistema,vigente,
-                                        idrol,contra) {
-                $("#id2").val(idusuariosistema);
-                $("#nombrerol2").val(idusuariosistema);
-                $("#vigente2").val(vigente);
-                $("#idrol2").val(idrol);
-                
+            function showUsuarioSistema(idusuariosistema, nombreusuariosistema,nombrecompleto,
+                                        contra,vigente) {
+                $("#idusuariosistema2").val(idusuariosistema);
+                $("#nombreusuariosistema2").val(nombreusuariosistema);
+                $("#nombrecompleto2").val(nombrecompleto);
                 $("#contra2").val(contra);
+                $("#vigente2").val(vigente);
+            
+                
+                
                 $("#modalUsuarioSistema").modal("show");
 
             }
+               //UpdateRol
+               function updateUsuarioSistema() {
+                $.ajax({
+                    url: 'ActualizaUsuarioSistema',
+                    type: 'POST',
+                    data: {
+                        idusuariosistema     : $("#idusuariosistema2").val(),
+                        nombreusuariosistema : $("#nombreusuariosistema2").val(),
+                        nombrecompleto       : $("#nombrecompleto2").val(),
+                        contra : $("#contra2").val(),
+                        vigente: $("#vigente2").val()
+                    }
+                }).done(function (json) { //Se ejecuta cuando todo sale bien
+                    alert(json.msj);
+                    //Refrescando la tabla
+                    $('#tbUsuarioSistema').dataTable().api().ajax.reload();
+                    
+                    //Cerrando el modal
+                    $('#modalUsuarioSistema').modal("toggle");
+                }).fail(function (json) { //Se ejecuta cuando algo sale mal
+                    alert(json.msj);
+                });
+            }
+               
                //
               
         </script>
@@ -181,11 +280,11 @@ and open the template in the editor.
                         <form class="col-lg-12" id="frmUsuarioSistema2" method="POST">
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="form-group">
-                                    <label class="control-label" for="nombreusuario2">Rol</label>
+                                    <label class="control-label" for="nombreusuariosistema2">Nombre usuario</label>
                                     <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
                                         <span class="input-group-addon">N</span>
-                                        <input class="form-control" id="nombreusuario2" name="nombreusuario2">
-                                        <input type="hidden" id="id" name="id">
+                                        <input class="form-control" id="nombreusuariosistema2" name="nombreusuariosistema2">
+                                        <input type="hidden" id="idusuariosistema2" name="idusuariosistema2">
                                     </div>
                                 </div>
                             </div>
@@ -200,6 +299,15 @@ and open the template in the editor.
                             </div>
                             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                 <div class="form-group">
+                                    <label class="control-label" for="contra2">Contraseña</label>
+                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
+                                        <span class="input-group-addon">Ñ</span>
+                                        <input class="form-control" id="contra2" name="contra2" type="password">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div class="form-group">
                                     <label class="control-label" for="vigente2">Vigente</label>
                                     <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
                                         <span class="input-group-addon">V</span>
@@ -207,15 +315,7 @@ and open the template in the editor.
                                     </div>
                                 </div>
                             </div>
-                           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                <div class="form-group">
-                                    <label class="control-label" for="idpais2">Clave País</label>
-                                    <div class="input-group cocol-lg-12 col-md-12 col-sm-12 col-xs-12l">
-                                        <span class="input-group-addon">P</span>
-                                        <input class="form-control" id="idpais2" name="idpais2">
-                                    </div>
-                                </div>
-                            </div>
+                           
                             
                         </form>
                     </div>
